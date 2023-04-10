@@ -1,27 +1,27 @@
 package com.example.sakilaapi.service.actor;
 
-import com.example.sakilaapi.dto.ActorDTO;
-import com.example.sakilaapi.exception.ResourceNotFoundException;
+import com.example.sakilaapi.dto.ActorDto;
 import com.example.sakilaapi.mapper.ActorMapper;
 import com.example.sakilaapi.model.Actor;
 import com.example.sakilaapi.repository.ActorRepository;
 import jakarta.ws.rs.NotFoundException;
 import jakarta.ws.rs.core.Response;
+import org.mapstruct.factory.Mappers;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 public class ActorService {
 
     private ActorRepository actorRepository;
-
+    private ActorMapper actorMapper;
     public ActorService() {
         this.actorRepository = new ActorRepository();
+        this.actorMapper = Mappers.getMapper(ActorMapper.class);
     }
 
-    public List<ActorDTO> getAllActors() {
-        return ActorMapper.INSTANCE.toActorDTOList(actorRepository.getAll());
+    public List<ActorDto> getAllActors() {
+        return actorMapper.toDto(actorRepository.getAll());
     }
 
     public Response getActorById(Short id) {

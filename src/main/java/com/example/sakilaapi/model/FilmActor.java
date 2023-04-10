@@ -24,7 +24,6 @@ import java.sql.Timestamp;
 )
 public class FilmActor  implements java.io.Serializable {
 
-
      private FilmActorId id;
      private Film film;
      private Actor actor;

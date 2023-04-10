@@ -1,9 +1,7 @@
 package com.example.sakilaapi.controller;
 
-import com.example.sakilaapi.dto.ActorDTO;
-import com.example.sakilaapi.exception.ResourceNotFoundException;
+import com.example.sakilaapi.dto.ActorDto;
 import com.example.sakilaapi.model.Actor;
-import com.example.sakilaapi.repository.ActorRepository;
 import com.example.sakilaapi.service.actor.ActorService;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
@@ -11,15 +9,13 @@ import jakarta.ws.rs.core.Response;
 
 
 import java.util.List;
-import java.util.Optional;
-
 @Path("/actors")
 public class ActorController {
     private final ActorService service = new ActorService();
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public List<ActorDTO> getAll() {
+    public List<ActorDto> getAll() {
         return service.getAllActors();
     }
 
