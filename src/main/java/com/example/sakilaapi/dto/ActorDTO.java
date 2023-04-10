@@ -10,7 +10,6 @@ import java.sql.Timestamp;
 import java.util.HashSet;
 import java.util.Set;
 
-@Builder
 @Data
 @AllArgsConstructor
 @NoArgsConstructor

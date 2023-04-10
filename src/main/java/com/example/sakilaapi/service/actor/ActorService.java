@@ -5,6 +5,8 @@ import com.example.sakilaapi.exception.ResourceNotFoundException;
 import com.example.sakilaapi.mapper.ActorMapper;
 import com.example.sakilaapi.model.Actor;
 import com.example.sakilaapi.repository.ActorRepository;
+import jakarta.ws.rs.NotFoundException;
+import jakarta.ws.rs.core.Response;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,20 +16,22 @@ public class ActorService {
 
     private ActorRepository actorRepository;
 
-    public ActorService(ActorRepository actorRepository) {
-        this.actorRepository = actorRepository;
+    public ActorService() {
+        this.actorRepository = new ActorRepository();
     }
 
     public List<ActorDTO> getAllActors() {
         return ActorMapper.INSTANCE.toActorDTOList(actorRepository.getAll());
     }
 
-    public Actor getActorById(Short id) {
+    public Response getActorById(Short id) {
         Optional<Actor> optionalActor = actorRepository.getById(id);
         if (optionalActor.isPresent()) {
-            return optionalActor.get();
+            return Response.ok(optionalActor.get()).build();
         } else {
-            throw new ResourceNotFoundException("Actor", "id", id);
+            return Response.status(Response.Status.NOT_FOUND).entity(
+                    "There is no actor with this id"
+            ).build();
         }
     }
 
@@ -37,21 +41,20 @@ public class ActorService {
 
     public void deleteActor(Short id) {
         if (!actorRepository.getById(id).isPresent()) {
-            throw new ResourceNotFoundException("Actor", "id", id);
+            throw new NotFoundException("can't get this actor with this id");
         }
         actorRepository.deleteById(id);
     }
 
     public Actor updateActor(Short id, Actor actorDetails) {
         Optional<Actor> optionalActor = actorRepository.getById(id);
-        if (optionalActor.isPresent()) {
+        if (!optionalActor.isPresent())
+            throw new NotFoundException("Can't get the actor with this id");
+        else{
             Actor actor = optionalActor.get();
             actor.setFirstName(actorDetails.getFirstName());
             actor.setLastName(actorDetails.getLastName());
             return actorRepository.save(actor);
-        } else {
-            //TODO -> search for handling exceptions in appropriate way.
-            throw new ResourceNotFoundException("Actor", "id", id);
         }
     }
 
