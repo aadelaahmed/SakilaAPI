@@ -78,8 +78,6 @@ public class Film  implements java.io.Serializable {
     }
    
      @Id @GeneratedValue(strategy=IDENTITY)
-
-    
     @Column(name="film_id", unique=true, nullable=false)
     public Short getFilmId() {
         return this.filmId;

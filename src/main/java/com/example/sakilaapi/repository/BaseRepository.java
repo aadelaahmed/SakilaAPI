@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Optional;
 
 public abstract class BaseRepository<T extends Serializable,ID> {
+
     private final Class<T> entityType;
     public BaseRepository(Class<T> entityClass) {
         this.entityType = entityClass;
@@ -54,3 +55,14 @@ public abstract class BaseRepository<T extends Serializable,ID> {
         });
     }
 }
+
+/*
+    ActorRepository
+    FilmRepository
+    CategoryRepository
+    CustomerRepository
+    RentalRepository
+    PaymentRepository
+    StaffRepository
+    StoreRepository
+ */

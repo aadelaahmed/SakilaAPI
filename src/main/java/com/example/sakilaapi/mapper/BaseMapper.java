@@ -4,7 +4,7 @@ import org.mapstruct.*;
 
 import java.util.List;
 
-public interface EntityMapper<D, E> {
+public interface BaseMapper<D, E> {
     E toEntity(D dto);
 
     D toDto(E entity);
