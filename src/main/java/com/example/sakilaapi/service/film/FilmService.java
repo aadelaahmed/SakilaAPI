@@ -14,7 +14,7 @@ public interface FilmService {
     List<FilmDto> getAvailableFilms();
     FilmDto saveFilm(FilmDto filmDto);
 
-    void updateFilm(FilmDto filmDto);
+    FilmDto updateFilm(Short id,FilmDto filmDto);
 
     void deleteFilm(FilmDto filmDto);
 

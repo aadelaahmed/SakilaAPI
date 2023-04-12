@@ -2,6 +2,7 @@ package com.example.sakilaapi.service.film;
 
 import com.example.sakilaapi.dto.FilmDto;
 import com.example.sakilaapi.mapper.FilmMapper;
+import com.example.sakilaapi.model.Actor;
 import com.example.sakilaapi.model.Film;
 import com.example.sakilaapi.repository.FilmRepository;
 import jakarta.ws.rs.NotFoundException;
@@ -52,8 +53,15 @@ public class FilmServiceImpl implements FilmService{
     }
 
     @Override
-    public void updateFilm(FilmDto filmDto) {
-        filmRepository.update(filmMapper.toEntity(filmDto));
+    public FilmDto updateFilm(Short id,FilmDto filmDto) {
+        Optional<Film> optionalFilm = filmRepository.getById(id);
+        if (!optionalFilm.isPresent())
+            throw new NotFoundException("Can't get the film with this id");
+        else {
+            Film film = optionalFilm.get();
+            film.setRating(filmDto.getRating());
+            return filmMapper.toDto(filmRepository.save(film));
+        }
     }
 
     @Override

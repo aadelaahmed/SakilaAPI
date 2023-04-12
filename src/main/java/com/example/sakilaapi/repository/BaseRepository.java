@@ -39,9 +39,9 @@ public abstract class BaseRepository<T extends Serializable,ID> {
         });
     }
 
-    public void update(T entity) {
+   /* public void update(T entity) {
         Database.doInTransactionWithoutResult(em -> em.merge(entity));
-    }
+    }*/
 
     public void delete(T entity) {
         Database.doInTransactionWithoutResult(em -> em.remove(entity));
@@ -55,14 +55,3 @@ public abstract class BaseRepository<T extends Serializable,ID> {
         });
     }
 }
-
-/*
-    ActorRepository
-    FilmRepository
-    CategoryRepository
-    CustomerRepository
-    RentalRepository
-    PaymentRepository
-    StaffRepository
-    StoreRepository
- */
