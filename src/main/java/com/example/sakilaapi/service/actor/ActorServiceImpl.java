@@ -31,7 +31,7 @@ public class ActorServiceImpl implements ActorService {
             Actor actor = optionalActor.get();
             actor.setFirstName(actorDetails.getFirstName());
             actor.setLastName(actorDetails.getLastName());
-            return actorMapper.toDto(actorRepository.save(actor));
+            return actorMapper.toDto(actorRepository.update(actor));
         }
     }
 
@@ -59,13 +59,15 @@ public class ActorServiceImpl implements ActorService {
         if (optionalExistedActor.isPresent())
             throw new EntityAlreadyExistException("Actor already exists with id: "+actorDto.getId());
         Actor actor = actorMapper.toEntity(actorDto);
+        actor.setId(null);
         System.out.println("actor obj which is saved in db -> " + actor.toString());
         return actorMapper.toDto(actorRepository.save(actor));
     }
 
     @Override
     public void deleteActor(Integer id) {
-        if (!actorRepository.getById(id).isPresent()) {
+        Optional<Actor> optionalActor = actorRepository.getById(id);
+        if (!optionalActor.isPresent()) {
             throw new EntityNotFoundException("can't get this actor with id: "+id);
         }
         actorRepository.deleteById(id);

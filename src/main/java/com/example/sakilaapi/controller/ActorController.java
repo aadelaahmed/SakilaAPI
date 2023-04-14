@@ -61,7 +61,8 @@ public class ActorController {
 
     @DELETE
     @Path("/{id}")
-    public void deleteById(@PathParam("id") Integer id) {
+    public Response deleteById(@PathParam("id") Integer id) {
         service.deleteActor(id);
+        return Response.ok("Actor's deleted successfully").build();
     }
 }

@@ -37,7 +37,7 @@ public class Actor implements Serializable {
     @Column(name = "last_update", nullable = false)
     private Instant lastUpdate;
 
-    @OneToMany(mappedBy = "actor")
+    @OneToMany(mappedBy = "actor",cascade = CascadeType.REMOVE)
     private Set<FilmActor> filmActors = new LinkedHashSet<>();
 
 }

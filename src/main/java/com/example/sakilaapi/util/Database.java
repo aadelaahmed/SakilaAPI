@@ -16,7 +16,8 @@ public class Database {
             return result;
         } catch (Exception e) {
             transaction.rollback();
-            System.out.println(e);
+            //TODO -> create custom JPA exception mapper
+            e.printStackTrace();
             throw e;
             //return null;
         } finally {
@@ -33,6 +34,7 @@ public class Database {
             transaction.commit();
         } catch (Exception e) {
             transaction.rollback();
+            e.printStackTrace();
             throw e;
         } finally {
             entityManager.close();

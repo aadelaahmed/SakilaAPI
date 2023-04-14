@@ -40,8 +40,8 @@ public abstract class BaseRepository<T extends Serializable,ID> {
         });
     }
 
-   public void update(T entity) {
-        Database.doInTransactionWithoutResult(em -> em.merge(entity));
+   public T update(T entity) {
+        return Database.doInTransaction(em -> em.merge(entity));
     }
 
     public void delete(T entity) {
