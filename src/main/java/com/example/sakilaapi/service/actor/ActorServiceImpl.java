@@ -5,7 +5,6 @@ import com.example.sakilaapi.mapper.ActorMapper;
 import com.example.sakilaapi.model.Actor;
 import com.example.sakilaapi.repository.ActorRepository;
 import jakarta.ws.rs.NotFoundException;
-import jakarta.ws.rs.core.Response;
 
 import java.util.List;
 import java.util.Optional;
@@ -20,7 +19,7 @@ public class ActorServiceImpl implements ActorService {
     }
 
     @Override
-    public ActorDto updateActor(Short id, ActorDto actorDetails) {
+    public ActorDto updateActor(Integer id, ActorDto actorDetails) {
         Optional<Actor> optionalActor = actorRepository.getById(id);
         if (!optionalActor.isPresent())
             throw new NotFoundException("Can't get the actor with this id");
@@ -38,7 +37,7 @@ public class ActorServiceImpl implements ActorService {
     }
 
     @Override
-    public ActorDto getActorById(Short id) {
+    public ActorDto getActorById(Integer id) {
         Optional<Actor> optionalActor = actorRepository.getById(id);
         if (optionalActor.isPresent()) {
             return actorMapper.toDto(optionalActor.get());
@@ -57,7 +56,7 @@ public class ActorServiceImpl implements ActorService {
     }
 
     @Override
-    public void deleteActor(Short id) {
+    public void deleteActor(Integer id) {
         if (!actorRepository.getById(id).isPresent()) {
             throw new NotFoundException("can't get this actor with this id");
         }

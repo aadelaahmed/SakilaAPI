@@ -8,21 +8,21 @@ import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 import java.time.Instant;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 /**
- * A DTO for the {@link com.example.sakilaapi.model.Actor} entity
+ * A DTO for the {@link com.example.sakilaapi.model.Category} entity
  */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class ActorDto implements Serializable {
-    private Integer id;
-    @Size(max = 45)
+public class CategoryDto implements Serializable {
+    private Short id;
+    @Size(max = 25)
     @NotNull
-    private String firstName;
-    @Size(max = 45)
-    @NotNull
-    private String lastName;
+    private String name;
     @NotNull
     private Instant lastUpdate;
+    private Set<FilmCategoryDto> filmCategories = new LinkedHashSet<>();
 }

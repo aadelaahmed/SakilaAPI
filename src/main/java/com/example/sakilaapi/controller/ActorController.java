@@ -1,12 +1,11 @@
 package com.example.sakilaapi.controller;
 
 import com.example.sakilaapi.dto.ActorDto;
-import com.example.sakilaapi.model.Actor;
 import com.example.sakilaapi.service.actor.ActorServiceImpl;
 import jakarta.ws.rs.*;
+import jakarta.ws.rs.core.GenericEntity;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
-import jdk.javadoc.doclet.Reporter;
 
 
 import java.util.List;
@@ -19,13 +18,16 @@ public class ActorController {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Response getAll() {
-        return Response.ok(service.getAllActors()).build();
+        List<ActorDto> actorDtos = service.getAllActors();
+        System.out.println(actorDtos.stream().limit(3));
+        GenericEntity entity = new GenericEntity<List<ActorDto>>(actorDtos){};
+        return Response.ok(entity).build();
     }
 
     @GET
     @Path("/{id}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getById(@PathParam("id") Short id) {
+    public Response getById(@PathParam("id") Integer id) {
         Optional<ActorDto> optionalActorDto = Optional.ofNullable(service.getActorById(id));
         if (optionalActorDto.isPresent())
         {
@@ -51,8 +53,8 @@ public class ActorController {
     @PUT
     @Path("/{id}")
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response update(@PathParam("id") Short id, ActorDto actorDto) {
-        actorDto.setActorId(id);
+    public Response update(@PathParam("id") Integer id, ActorDto actorDto) {
+        actorDto.setId(id);
         Optional<ActorDto> optionalActorDto = Optional.of(service.updateActor(id,actorDto));
         if (optionalActorDto.isPresent()){
             return Response.ok(optionalActorDto.get()).build();
@@ -63,7 +65,7 @@ public class ActorController {
 
     @DELETE
     @Path("/{id}")
-    public void deleteById(@PathParam("id") Short id) {
+    public void deleteById(@PathParam("id") Integer id) {
         service.deleteActor(id);
     }
 }

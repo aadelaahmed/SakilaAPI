@@ -11,7 +11,7 @@ import jakarta.persistence.criteria.Root;
 
 import java.util.List;
 
-public class ActorRepository extends BaseRepository<Actor, Short> {
+public class ActorRepository extends BaseRepository<Actor, Integer> {
     public ActorRepository() {
         super(Actor.class);
     }

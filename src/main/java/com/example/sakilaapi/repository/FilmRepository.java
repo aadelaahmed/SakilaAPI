@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-public class FilmRepository extends BaseRepository<Film, Short> {
+public class FilmRepository extends BaseRepository<Film, Integer> {
     public FilmRepository() {
         super(Film.class);
     }
@@ -35,7 +35,7 @@ public class FilmRepository extends BaseRepository<Film, Short> {
         );
     }
 
-    public List<Film> findFilmsByActorId(Short actorId) {
+    public List<Film> findFilmsByActorId(Integer actorId) {
         return Database.doInTransaction(
                 entityManager -> {
                     CriteriaBuilder cb = entityManager.getCriteriaBuilder();
