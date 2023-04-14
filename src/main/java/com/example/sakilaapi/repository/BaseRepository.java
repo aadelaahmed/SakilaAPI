@@ -20,7 +20,8 @@ public abstract class BaseRepository<T extends Serializable,ID> {
 
     public Optional<T> getById(ID id) {
         T entity = Database.doInTransaction(em -> em.find(entityType, id));
-        return Optional.ofNullable(entity);    }
+        return Optional.ofNullable(entity);
+    }
 
     public List<T> getAll() {
         return Database.doInTransaction(em -> {

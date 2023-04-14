@@ -20,7 +20,8 @@ public class ActorController {
     public Response getAll() {
         List<ActorDto> actorDtos = service.getAllActors();
         System.out.println(actorDtos.stream().limit(3));
-        GenericEntity entity = new GenericEntity<List<ActorDto>>(actorDtos){};
+        GenericEntity entity = new GenericEntity<>(actorDtos) {
+        };
         return Response.ok(entity).build();
     }
 
@@ -29,14 +30,9 @@ public class ActorController {
     @Produces(MediaType.APPLICATION_JSON)
     public Response getById(@PathParam("id") Integer id) {
         Optional<ActorDto> optionalActorDto = Optional.ofNullable(service.getActorById(id));
-        if (optionalActorDto.isPresent())
-        {
-            Response.ok().entity(
-                    optionalActorDto.get()
-            ).build();
-        }
-        return Response.status(Response.Status.BAD_REQUEST)
-                .entity("can't find actor with this id").build();
+        return Response.ok().entity(
+                optionalActorDto.get()
+        ).build();
     }
 
     @POST
