@@ -12,17 +12,18 @@ import java.util.LinkedHashSet;
 import java.util.Set;
 
 /**
- * A DTO for the {@link com.example.sakilaapi.model.Category} entity
+ * A DTO for the {@link com.example.sakilaapi.model.Language} entity
  */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class CategoryDto implements Serializable {
+public class LanguageDto implements Serializable {
     private Short id;
-    @Size(max = 25)
+    @Size(max = 20)
     @NotNull
     private String name;
     @NotNull
     private Instant lastUpdate;
-    //private Set<FilmCategoryDto> filmCategories = new LinkedHashSet<>();
+    /*private Set<FilmDto> films = new LinkedHashSet<>();
+    private Set<FilmDto> orgLangFilms = new LinkedHashSet<>();*/
 }

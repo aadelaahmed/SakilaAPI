@@ -30,7 +30,7 @@ public class FilmRepository extends BaseRepository<Film, Integer> {
         }
     }
 
-    public List<Film> searchFilms(Integer releaseYear,  List<Integer> categoryIds) {
+    /*public List<Film> searchFilms(Integer releaseYear,  List<Integer> categoryIds) {
         return Database.doInTransaction(
                 entityManager -> {
                     CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
@@ -49,7 +49,7 @@ public class FilmRepository extends BaseRepository<Film, Integer> {
                     return typedQuery.getResultList();
                 }
         );
-    }
+    }*/
 
     public List<Film> findFilmsByActorId(Integer actorId) {
         return Database.doInTransaction(
@@ -58,8 +58,23 @@ public class FilmRepository extends BaseRepository<Film, Integer> {
                     CriteriaQuery<Film> cq = cb.createQuery(Film.class);
                     Root<Film> film = cq.from(Film.class);
                     Join<Film, FilmActor> filmActor = film.join("filmActors");
-                    Predicate actorIdPredicate = cb.equal(filmActor.get("actor").get("actorId"), actorId);
+                    Predicate actorIdPredicate = cb.equal(filmActor.get("actor").get("id"), actorId);
                     cq.where(actorIdPredicate);
+                    cq.distinct(true);
+                    return entityManager.createQuery(cq).getResultList();
+                }
+        );
+    }
+
+    public List<Film> findFilmsByCategoryId(Integer categoryId) {
+        return Database.doInTransaction(
+                entityManager -> {
+                    CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+                    CriteriaQuery<Film> cq = cb.createQuery(Film.class);
+                    Root<Film> film = cq.from(Film.class);
+                    Join<Film, FilmCategory> filmCategory = film.join("filmCategories");
+                    Predicate categoryIdPredicate = cb.equal(filmCategory.get("category").get("id"), categoryId);
+                    cq.where(categoryIdPredicate);
                     cq.distinct(true);
                     return entityManager.createQuery(cq).getResultList();
                 }

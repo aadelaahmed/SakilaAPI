@@ -37,7 +37,7 @@ public class FilmController {
         ).build();
     }
 
-    @GET
+    /*@GET
     @Path("/search")
     @Produces(MediaType.APPLICATION_JSON)
     public Response search(@QueryParam("releaseYear") Integer releaseYear,
@@ -46,7 +46,7 @@ public class FilmController {
         GenericEntity<List<FilmDto>> entity = new GenericEntity<List<FilmDto>>(filmDtos) {
         };
         return Response.ok(entity).build();
-    }
+    }*/
 
     @GET
     @Path("/actors/{actorId}")
@@ -58,7 +58,16 @@ public class FilmController {
 
         return Response.ok(entity).build();
     }
+    @GET
+    @Path("/categories/{categoryId}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getByCategory(@PathParam("categoryId") Integer categoryId) {
+        List<FilmDto> filmDtos = service.getFilmsByCategoryId(categoryId);
+        GenericEntity<List<FilmDto>> entity = new GenericEntity<List<FilmDto>>(filmDtos) {
+        };
 
+        return Response.ok(entity).build();
+    }
 
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
@@ -76,7 +85,7 @@ public class FilmController {
     @Consumes(MediaType.APPLICATION_JSON)
     public Response update(@PathParam("id") Integer id, FilmDto filmDto) {
         filmDto.setId(id);
-        Optional<FilmDto> optionalFilmDto = Optional.of(service.getFilmById(id));
+        Optional<FilmDto> optionalFilmDto = Optional.of(service.updateFilm(id,filmDto));
         if (optionalFilmDto.isPresent()) {
             return Response.ok(optionalFilmDto.get()).build();
         }
@@ -88,14 +97,7 @@ public class FilmController {
     @Path("/{id}")
     public Response deleteById(@PathParam("id") Integer id) {
         service.deleteFilmById(id);
-        return Response.ok().build();
-    }
-
-    @DELETE
-    @Consumes(MediaType.APPLICATION_JSON)
-    public Response delete(FilmDto filmDto) {
-        service.deleteFilm(filmDto);
-        return Response.ok().build();
+        return Response.ok("the film was deleted successfully").build();
     }
 }
 

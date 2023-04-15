@@ -35,11 +35,11 @@ public class Film implements Serializable {
     private Integer releaseYear;
 
     @NotNull
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "language_id", nullable = false)
     private Language language;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "original_language_id")
     private Language originalLanguage;
 
@@ -69,13 +69,13 @@ public class Film implements Serializable {
     @Column(name = "last_update", nullable = false)
     private Instant lastUpdate;
 
-    @OneToMany(mappedBy = "film")
+    @OneToMany(mappedBy = "film",cascade = CascadeType.REMOVE)
     private Set<Inventory> inventories = new LinkedHashSet<>();
 
-    @OneToMany(mappedBy = "film")
+    @OneToMany(mappedBy = "film",cascade = CascadeType.REMOVE)
     private Set<FilmActor> filmActors = new LinkedHashSet<>();
 
-    @OneToMany(mappedBy = "film")
+    @OneToMany(mappedBy = "film",cascade = CascadeType.REMOVE)
     private Set<FilmCategory> filmCategories = new LinkedHashSet<>();
 
 }

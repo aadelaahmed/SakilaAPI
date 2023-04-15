@@ -1,13 +1,16 @@
 package com.example.sakilaapi.dto;
 
+import jakarta.persistence.Column;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.time.Instant;
 
 /**
  * A DTO for the {@link com.example.sakilaapi.model.Film} entity
@@ -28,4 +31,30 @@ public class FilmDto implements Serializable {
     private Integer length;
     @Size(max = 5)
     private String rating;
+    @NotNull
+    private LanguageDto language;
+    @NotNull
+    private LanguageDto originalLanguage;
+    @NotNull
+    private Instant lastUpdate;
+    @NotNull
+    private BigDecimal replacementCost;
+
+    @Override
+    public String toString() {
+        return "FilmDto{" +
+                "id=" + id +
+                ", title='" + title + '\'' +
+                ", description='" + description + '\'' +
+                ", releaseYear=" + releaseYear +
+                ", rentalDuration=" + rentalDuration +
+                ", rentalRate=" + rentalRate +
+                ", length=" + length +
+                ", rating='" + rating + '\'' +
+                ", language=" + language +
+                ", originalLanguage=" + originalLanguage +
+                ", lastUpdate=" + lastUpdate +
+                ", replacementCost=" + replacementCost +
+                '}';
+    }
 }

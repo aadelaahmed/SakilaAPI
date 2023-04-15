@@ -33,7 +33,7 @@ public class Inventory {
     @Column(name = "last_update", nullable = false)
     private Instant lastUpdate;
 
-    @OneToMany(mappedBy = "inventory")
+    @OneToMany(mappedBy = "inventory",cascade = CascadeType.REMOVE)
     private Set<Rental> rentals = new LinkedHashSet<>();
 
 }

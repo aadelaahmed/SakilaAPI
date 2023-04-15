@@ -25,7 +25,8 @@ public class CategoryController {
     @Produces(MediaType.APPLICATION_JSON)
     public Response getAllCategories() {
         List<CategoryDto> categoryDtos = categoryService.getAllCategories();
-        GenericEntity<List<CategoryDto>> entity = new GenericEntity<List<CategoryDto>>(categoryDtos) {};
+        GenericEntity<List<CategoryDto>> entity = new GenericEntity<>(categoryDtos) {
+        };
         return Response.ok(entity).build();
     }
 

@@ -28,9 +28,11 @@ public class ActorServiceImpl implements ActorService {
         if (!optionalActor.isPresent())
             throw new EntityNotFoundException("Can't get the actor with id: " + id);
         else {
-            Actor actor = optionalActor.get();
+            /*Actor actor = optionalActor.get();
             actor.setFirstName(actorDetails.getFirstName());
-            actor.setLastName(actorDetails.getLastName());
+            actor.setLastName(actorDetails.getLastName());*/
+            Actor actor = actorMapper.toEntity(actorDetails);
+            actor.setId(id);
             return actorMapper.toDto(actorRepository.update(actor));
         }
     }
