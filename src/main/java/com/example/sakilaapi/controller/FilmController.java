@@ -1,5 +1,6 @@
 package com.example.sakilaapi.controller;
 
+import com.example.sakilaapi.dto.ActorDto;
 import com.example.sakilaapi.dto.FilmDto;
 import com.example.sakilaapi.service.film.FilmServiceImpl;
 import jakarta.ws.rs.*;
@@ -21,8 +22,9 @@ public class FilmController {
     @Produces(MediaType.APPLICATION_JSON)
     public Response getAll() {
         List<FilmDto> filmDtos = service.getAllFilms();
-        //GenericEntity<List<FilmDto>> entity = new GenericEntity<List<FilmDto>>(filmDtos) {};
-        return Response.ok(filmDtos).build();
+        GenericEntity<List<FilmDto>> entity = new GenericEntity<>(filmDtos) {
+        };
+        return Response.ok(entity).build();
     }
 
     @GET
@@ -30,14 +32,9 @@ public class FilmController {
     @Produces(MediaType.APPLICATION_JSON)
     public Response getById(@PathParam("id") Integer id) {
         Optional<FilmDto> optionalFilmDto = Optional.ofNullable(service.getFilmById(id));
-        if (optionalFilmDto.isPresent())
-        {
-            Response.ok().entity(
-                    optionalFilmDto.get()
-            ).build();
-        }
-        return Response.status(Response.Status.BAD_REQUEST)
-                .entity("can't find film with this id").build();
+        return Response.ok().entity(
+                optionalFilmDto.get()
+        ).build();
     }
 
     @GET
@@ -46,7 +43,8 @@ public class FilmController {
     public Response search(@QueryParam("releaseYear") Integer releaseYear,
                            @QueryParam("categoryIds") List<Integer> categoryIds) {
         List<FilmDto> filmDtos = service.searchFilms(releaseYear, categoryIds);
-        GenericEntity<List<FilmDto>> entity = new GenericEntity<List<FilmDto>>(filmDtos) {};
+        GenericEntity<List<FilmDto>> entity = new GenericEntity<List<FilmDto>>(filmDtos) {
+        };
         return Response.ok(entity).build();
     }
 
@@ -55,7 +53,8 @@ public class FilmController {
     @Produces(MediaType.APPLICATION_JSON)
     public Response getByActor(@PathParam("actorId") Integer actorId) {
         List<FilmDto> filmDtos = service.getFilmsByActor(actorId);
-        GenericEntity<List<FilmDto>> entity = new GenericEntity<List<FilmDto>>(filmDtos) {};
+        GenericEntity<List<FilmDto>> entity = new GenericEntity<List<FilmDto>>(filmDtos) {
+        };
 
         return Response.ok(entity).build();
     }
@@ -66,7 +65,7 @@ public class FilmController {
     @Produces(MediaType.APPLICATION_JSON)
     public Response create(FilmDto filmDto) {
         Optional<FilmDto> optionalFilmDto = Optional.ofNullable(service.saveFilm(filmDto));
-        if (optionalFilmDto.isPresent()){
+        if (optionalFilmDto.isPresent()) {
             return Response.ok(optionalFilmDto.get()).build();
         }
         return Response.status(Response.Status.BAD_REQUEST).entity("Can't create this film").build();
@@ -78,7 +77,7 @@ public class FilmController {
     public Response update(@PathParam("id") Integer id, FilmDto filmDto) {
         filmDto.setId(id);
         Optional<FilmDto> optionalFilmDto = Optional.of(service.getFilmById(id));
-        if (optionalFilmDto.isPresent()){
+        if (optionalFilmDto.isPresent()) {
             return Response.ok(optionalFilmDto.get()).build();
         }
         return Response.status(Response.Status.BAD_REQUEST)

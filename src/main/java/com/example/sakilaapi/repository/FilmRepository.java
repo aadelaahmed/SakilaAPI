@@ -2,6 +2,7 @@ package com.example.sakilaapi.repository;
 
 import com.example.sakilaapi.model.*;
 import com.example.sakilaapi.util.Database;
+import jakarta.persistence.NoResultException;
 import jakarta.persistence.TypedQuery;
 import jakarta.persistence.criteria.*;
 
@@ -12,6 +13,21 @@ import java.util.Optional;
 public class FilmRepository extends BaseRepository<Film, Integer> {
     public FilmRepository() {
         super(Film.class);
+    }
+
+    public Film searchFilmByTitle(String title) {
+        try {
+            return Database.doInTransaction(entityManager -> {
+                CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+                CriteriaQuery<Film> query = criteriaBuilder.createQuery(Film.class);
+                Root<Film> root = query.from(Film.class);
+                query.select(root).where(criteriaBuilder.equal(root.get("title"), title));
+                TypedQuery<Film> typedQuery = entityManager.createQuery(query);
+                return typedQuery.getSingleResult();
+            });
+        } catch (NoResultException e) {
+            return null;
+        }
     }
 
     public List<Film> searchFilms(Integer releaseYear,  List<Integer> categoryIds) {

@@ -26,7 +26,7 @@ public class ActorServiceImpl implements ActorService {
     public ActorDto updateActor(Integer id, ActorDto actorDetails) {
         Optional<Actor> optionalActor = actorRepository.getById(id);
         if (!optionalActor.isPresent())
-            throw new EntityNotFoundException("Can't get the actor with id: "+id);
+            throw new EntityNotFoundException("Can't get the actor with id: " + id);
         else {
             Actor actor = optionalActor.get();
             actor.setFirstName(actorDetails.getFirstName());
@@ -55,9 +55,12 @@ public class ActorServiceImpl implements ActorService {
     @Override
     public ActorDto createActor(ActorDto actorDto) {
         //firstly,ensures that there is no actor with this id in db.
-        Optional<Actor> optionalExistedActor = actorRepository.getById(actorDto.getId());
-        if (optionalExistedActor.isPresent())
-            throw new EntityAlreadyExistException("Actor already exists with id: "+actorDto.getId());
+        Optional<Actor> optionalExistedActor = null;
+        if (actorDto.getId() != null) {
+            optionalExistedActor = actorRepository.getById(actorDto.getId());
+            if (optionalExistedActor.isPresent())
+                throw new EntityAlreadyExistException("Actor already exists with id: " + actorDto.getId());
+        }
         Actor actor = actorMapper.toEntity(actorDto);
         actor.setId(null);
         System.out.println("actor obj which is saved in db -> " + actor.toString());
@@ -68,7 +71,7 @@ public class ActorServiceImpl implements ActorService {
     public void deleteActor(Integer id) {
         Optional<Actor> optionalActor = actorRepository.getById(id);
         if (!optionalActor.isPresent()) {
-            throw new EntityNotFoundException("can't get this actor with id: "+id);
+            throw new EntityNotFoundException("can't get this actor with id: " + id);
         }
         actorRepository.deleteById(id);
     }
