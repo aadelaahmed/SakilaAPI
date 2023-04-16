@@ -3,6 +3,7 @@ package com.example.sakilaapi.repository;
 import com.example.sakilaapi.model.Actor;
 import com.example.sakilaapi.util.Database;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Root;
@@ -52,7 +53,8 @@ public abstract class BaseRepository<T extends Serializable,ID> {
             T entity = em.find(entityType, id);
             if (entity != null) {
                 em.remove(entity);
-            }
+            }else
+                throw new EntityNotFoundException("There is no "+entityType.getSimpleName()+" with this id");
         });
     }
 }

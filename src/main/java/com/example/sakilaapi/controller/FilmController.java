@@ -2,6 +2,7 @@ package com.example.sakilaapi.controller;
 
 import com.example.sakilaapi.dto.ActorDto;
 import com.example.sakilaapi.dto.FilmDto;
+import com.example.sakilaapi.service.film.FilmService;
 import com.example.sakilaapi.service.film.FilmServiceImpl;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.GenericEntity;
@@ -16,7 +17,7 @@ import jakarta.ws.rs.Path;
 
 @Path("/films")
 public class FilmController {
-    private final FilmServiceImpl service = new FilmServiceImpl();
+    private final FilmService service = new FilmServiceImpl();
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)

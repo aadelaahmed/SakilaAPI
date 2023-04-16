@@ -71,10 +71,10 @@ public class ActorServiceImpl implements ActorService {
 
     @Override
     public void deleteActor(Integer id) {
-        Optional<Actor> optionalActor = actorRepository.getById(id);
+        /*Optional<Actor> optionalActor = actorRepository.getById(id);
         if (!optionalActor.isPresent()) {
             throw new EntityNotFoundException("can't get this actor with id: " + id);
-        }
+        }*/
         actorRepository.deleteById(id);
     }
 

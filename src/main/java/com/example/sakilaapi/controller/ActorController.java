@@ -1,6 +1,7 @@
 package com.example.sakilaapi.controller;
 
 import com.example.sakilaapi.dto.ActorDto;
+import com.example.sakilaapi.service.actor.ActorService;
 import com.example.sakilaapi.service.actor.ActorServiceImpl;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.GenericEntity;
@@ -13,7 +14,7 @@ import java.util.Optional;
 
 @Path("/actors")
 public class ActorController {
-    private final ActorServiceImpl service = new ActorServiceImpl();
+    private final ActorService service = new ActorServiceImpl();
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
