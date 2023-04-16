@@ -2,8 +2,8 @@ package com.example.sakilaapi.mapper;
 
 import org.mapstruct.*;
 
+import javax.enterprise.context.ApplicationScoped;
 import java.util.List;
-
 public interface BaseMapper<D, E> {
     E toEntity(D dto);
 

@@ -2,13 +2,9 @@ package com.example.sakilaapi.service.rental;
 
 import com.example.sakilaapi.dto.RentalDto;
 import com.example.sakilaapi.exception.EntityAlreadyExistException;
-import com.example.sakilaapi.mapper.ActorMapper;
-import com.example.sakilaapi.model.Actor;
 import com.example.sakilaapi.model.Rental;
-import com.example.sakilaapi.model.RentalMapper;
-import com.example.sakilaapi.repository.ActorRepository;
+import com.example.sakilaapi.mapper.RentalMapper;
 import com.example.sakilaapi.repository.RentalRepository;
-import jakarta.persistence.EntityNotFoundException;
 
 import java.util.List;
 import java.util.Optional;
