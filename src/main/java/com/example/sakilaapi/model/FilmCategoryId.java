@@ -18,7 +18,7 @@ public class FilmCategoryId implements Serializable {
     private Integer filmId;
 
     @Column(name = "category_id", columnDefinition = "TINYINT UNSIGNED not null")
-    private Short categoryId;
+    private Integer categoryId;
 
     @Override
     public boolean equals(Object o) {

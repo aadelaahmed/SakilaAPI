@@ -1,7 +1,10 @@
 package com.example.sakilaapi.controller;
 
 
+import com.example.sakilaapi.controller.request.FilmCategoryRequest;
 import com.example.sakilaapi.dto.CategoryDto;
+import com.example.sakilaapi.dto.FilmDto;
+import com.example.sakilaapi.model.Category;
 import com.example.sakilaapi.service.category.CategoryService;
 import com.example.sakilaapi.service.category.CategoryServiceImpl;
 import jakarta.ws.rs.*;
@@ -61,4 +64,15 @@ public class CategoryController {
         categoryService.deleteCategory(id);
         return Response.noContent().build();
     }
+    @POST
+    @Path("{categoryId}")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response addFilmToCategory(@PathParam("categoryId") Integer categoryId, FilmCategoryRequest request) {
+        boolean isAdded = categoryService.addFilmToCategory(request.getFilmId(), categoryId);
+        if (isAdded)
+            return Response.ok("The film was added successfully to the category with id: "+categoryId).build();
+        else
+            return Response.status(Response.Status.BAD_REQUEST).build();
+    }
+
 }
