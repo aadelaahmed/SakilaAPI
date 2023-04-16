@@ -18,7 +18,7 @@ import java.util.Set;
 @AllArgsConstructor
 @NoArgsConstructor
 public class CategoryDto implements Serializable {
-    private Short id;
+    private Integer id;
     @Size(max = 25)
     @NotNull
     private String name;
