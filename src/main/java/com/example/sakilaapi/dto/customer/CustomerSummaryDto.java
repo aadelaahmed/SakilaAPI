@@ -1,6 +1,5 @@
-package com.example.sakilaapi.dto;
+package com.example.sakilaapi.dto.customer;
 
-import com.example.sakilaapi.model.AddressDto;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
@@ -10,16 +9,12 @@ import lombok.NoArgsConstructor;
 import java.io.Serializable;
 import java.time.Instant;
 
-/**
- * A DTO for the {@link com.example.sakilaapi.model.Customer} entity
- */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class CustomerDto implements Serializable {
+public class CustomerSummaryDto implements Serializable {
     private Integer id;
-    @NotNull
-    private StoreDto store;
+    private String storeAddress;
     @Size(max = 45)
     @NotNull
     private String firstName;
@@ -28,11 +23,12 @@ public class CustomerDto implements Serializable {
     private String lastName;
     @Size(max = 50)
     private String email;
-    @NotNull
-    private AddressDto address;
+    private String address;
+    private String postalCode;
+    private String city;
     @NotNull
     private Boolean active = false;
     @NotNull
     private Instant createDate;
-    private Instant lastUpdate;
+//    private Instant lastUpdate;
 }

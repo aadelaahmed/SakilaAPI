@@ -5,6 +5,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.Instant;
 
@@ -12,7 +13,7 @@ import java.time.Instant;
 @Setter
 @Entity
 @Table(name = "payment")
-public class Payment {
+public class Payment implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "payment_id", columnDefinition = "SMALLINT UNSIGNED not null")

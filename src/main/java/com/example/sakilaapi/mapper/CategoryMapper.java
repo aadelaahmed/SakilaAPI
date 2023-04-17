@@ -5,7 +5,11 @@ import com.example.sakilaapi.model.Category;
 import org.mapstruct.*;
 import org.mapstruct.factory.Mappers;
 
-@Mapper(unmappedTargetPolicy = ReportingPolicy.IGNORE, componentModel = MappingConstants.ComponentModel.CDI, uses = {FilmCategoryMapper.class})
+/*@Mapper(unmappedTargetPolicy = ReportingPolicy.IGNORE,
+        componentModel = MappingConstants.ComponentModel.CDI, uses = {FilmCategoryMapper.class})*/
+@Mapper(unmappedTargetPolicy = ReportingPolicy.IGNORE,
+        componentModel = MappingConstants.ComponentModel.CDI)
+
 public interface CategoryMapper extends BaseMapper<CategoryDto, Category> {
     CategoryMapper INSTANCE = Mappers.getMapper(CategoryMapper.class);
 

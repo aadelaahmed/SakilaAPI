@@ -1,6 +1,6 @@
 package com.example.sakilaapi.dto;
 
-import com.example.sakilaapi.model.Customer;
+import com.example.sakilaapi.dto.customer.CustomerDto;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -23,7 +23,7 @@ public class RentalDto implements Serializable {
     private InventoryDto inventoryDto;
     @NotNull
     private CustomerDto customerDto;
-//    private Instant returnDate;
+    private Instant returnDate;
     @NotNull
     private StaffDto staffDto;
     @NotNull

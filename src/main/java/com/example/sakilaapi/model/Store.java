@@ -5,6 +5,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.io.Serializable;
 import java.time.Instant;
 import java.util.LinkedHashSet;
 import java.util.Set;
@@ -13,7 +14,7 @@ import java.util.Set;
 @Setter
 @Entity
 @Table(name = "store")
-public class Store {
+public class Store implements Serializable {
     @Id
     @Column(name = "store_id", columnDefinition = "TINYINT UNSIGNED not null")
     private Short id;

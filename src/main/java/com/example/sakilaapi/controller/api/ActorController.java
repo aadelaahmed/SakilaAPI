@@ -1,6 +1,10 @@
-package com.example.sakilaapi.controller;
+package com.example.sakilaapi.controller.api;
 
 import com.example.sakilaapi.dto.ActorDto;
+import com.example.sakilaapi.mapper.ActorMapper;
+import com.example.sakilaapi.model.Actor;
+import com.example.sakilaapi.repository.ActorRepository;
+import com.example.sakilaapi.service.BaseService;
 import com.example.sakilaapi.service.actor.ActorService;
 import com.example.sakilaapi.service.actor.ActorServiceImpl;
 import jakarta.ws.rs.*;
@@ -14,12 +18,15 @@ import java.util.Optional;
 
 @Path("/actors")
 public class ActorController {
-    private final ActorService service = new ActorServiceImpl();
+    //TODO -> USE IOC spring container HERE
+    private final ActorServiceImpl service = new ActorServiceImpl(
+            new ActorRepository(), ActorMapper.INSTANCE
+    );
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Response getAll() {
-        List<ActorDto> actorDtos = service.getAllActors();
+        List<ActorDto> actorDtos = service.getAll();
         System.out.println(actorDtos.stream().limit(3));
         GenericEntity entity = new GenericEntity<>(actorDtos) {
         };
@@ -30,7 +37,7 @@ public class ActorController {
     @Path("/{id}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getById(@PathParam("id") Integer id) {
-        Optional<ActorDto> optionalActorDto = Optional.ofNullable(service.getActorById(id));
+        Optional<ActorDto> optionalActorDto = Optional.ofNullable(service.getById(id));
         return Response.ok().entity(
                 optionalActorDto.get()
         ).build();
@@ -40,7 +47,7 @@ public class ActorController {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response create(ActorDto actorDto) {
-        Optional<ActorDto> optionalActorDto = Optional.ofNullable(service.createActor(actorDto));
+        Optional<ActorDto> optionalActorDto = Optional.ofNullable(service.create(actorDto,actorDto.getId()));
         if (optionalActorDto.isPresent()){
             return Response.ok(optionalActorDto.get()).build();
         }
@@ -52,7 +59,7 @@ public class ActorController {
     @Consumes(MediaType.APPLICATION_JSON)
     public Response update(@PathParam("id") Integer id, ActorDto actorDto) {
         actorDto.setId(id);
-        Optional<ActorDto> optionalActorDto = Optional.of(service.updateActor(id,actorDto));
+        Optional<ActorDto> optionalActorDto = Optional.of(service.update(id,actorDto));
         if (optionalActorDto.isPresent()){
             return Response.ok(optionalActorDto.get()).build();
         }
@@ -63,7 +70,7 @@ public class ActorController {
     @DELETE
     @Path("/{id}")
     public Response deleteById(@PathParam("id") Integer id) {
-        service.deleteActor(id);
+        service.deleteById(id);
         return Response.ok("Actor's deleted successfully").build();
     }
 }

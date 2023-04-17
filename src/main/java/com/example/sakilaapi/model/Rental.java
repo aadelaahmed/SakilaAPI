@@ -48,5 +48,4 @@ public class Rental implements Serializable {
 
     @OneToMany(mappedBy = "rental")
     private Set<Payment> payments = new LinkedHashSet<>();
-
 }

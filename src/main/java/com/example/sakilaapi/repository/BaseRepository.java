@@ -24,21 +24,26 @@ public abstract class BaseRepository<T extends Serializable,ID> {
         return Optional.ofNullable(entity);
     }
 
-    public List<T> getAll() {
-        return Database.doInTransaction(em -> {
-            CriteriaBuilder builder = em.getCriteriaBuilder();
-            CriteriaQuery<T> query = builder.createQuery(entityType);
-            Root<T> root = query.from(entityType);
-            query.select(root);
-            return em.createQuery(query).getResultList();
-        });
-    }
-
     public T save(T entity) {
         return Database.doInTransaction(em -> {
             em.persist(entity);
             return entity;
         });
+    }
+
+    public List<T> getAll(EntityManager entityManager) {
+        /*return Database.doInTransaction(em -> {
+            CriteriaBuilder builder = em.getCriteriaBuilder();
+            CriteriaQuery<T> query = builder.createQuery(entityType);
+            Root<T> root = query.from(entityType);
+            query.select(root);
+            return em.createQuery(query).getResultList();
+        });*/
+        CriteriaBuilder builder = entityManager.getCriteriaBuilder();
+        CriteriaQuery<T> query = builder.createQuery(entityType);
+        Root<T> root = query.from(entityType);
+        query.select(root);
+        return entityManager.createQuery(query).getResultList();
     }
 
    public T update(T entity) {
