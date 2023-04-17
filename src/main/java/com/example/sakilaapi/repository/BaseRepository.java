@@ -30,7 +30,17 @@ public abstract class BaseRepository<T extends Serializable,ID> {
             return entity;
         });
     }
-
+    public boolean isExist(ID id){
+        return Database.doInTransaction(
+                entityManager -> {
+                    T entity = entityManager.find(entityType,id);
+                    if (entity == null)
+                        return false;
+                    else
+                        return true;
+                }
+        );
+    }
     public List<T> getAll(EntityManager entityManager) {
         /*return Database.doInTransaction(em -> {
             CriteriaBuilder builder = em.getCriteriaBuilder();
