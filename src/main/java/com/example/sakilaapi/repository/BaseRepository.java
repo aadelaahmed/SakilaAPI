@@ -32,13 +32,6 @@ public abstract class BaseRepository<T extends Serializable,ID> {
     }
 
     public List<T> getAll(EntityManager entityManager) {
-        /*return Database.doInTransaction(em -> {
-            CriteriaBuilder builder = em.getCriteriaBuilder();
-            CriteriaQuery<T> query = builder.createQuery(entityType);
-            Root<T> root = query.from(entityType);
-            query.select(root);
-            return em.createQuery(query).getResultList();
-        });*/
         CriteriaBuilder builder = entityManager.getCriteriaBuilder();
         CriteriaQuery<T> query = builder.createQuery(entityType);
         Root<T> root = query.from(entityType);

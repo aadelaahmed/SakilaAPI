@@ -1,4 +1,4 @@
-package com.example.sakilaapi.dto;
+package com.example.sakilaapi.dto.staff;
 
 import com.example.sakilaapi.dto.store.StoreDto;
 import com.example.sakilaapi.model.AddressDto;
@@ -18,7 +18,7 @@ import java.time.Instant;
 @AllArgsConstructor
 @NoArgsConstructor
 public class StaffDto implements Serializable {
-    private Short id;
+    private Integer id;
     @Size(max = 45)
     @NotNull
     private String firstName;
@@ -27,7 +27,6 @@ public class StaffDto implements Serializable {
     private String lastName;
     @NotNull
     private AddressDto address;
-    private byte[] picture;
     @Size(max = 50)
     private String email;
     @NotNull
@@ -38,8 +37,5 @@ public class StaffDto implements Serializable {
     @Size(max = 40)
     private String password;
     @NotNull
-    private Instant lastUpdate;
-    private StoreDto storeMng;
-    @NotNull
-    private StoreDto storeDto;
+    private Integer storeId;
 }

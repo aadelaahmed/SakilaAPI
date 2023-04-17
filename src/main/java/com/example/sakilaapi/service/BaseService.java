@@ -77,7 +77,7 @@ public abstract class BaseService<E extends Serializable, D> {
                         mapper.partialUpdate(entity, dto);
                         return mapper.toDto(repository.update(entity));
                     } else {
-                        throw new EntityNotFoundException("Can't get the entity with id: " + id);
+                        throw new EntityNotFoundException("Can't get "+getEntityClass().getSimpleName()+" with id: " + id);
                     }
                 }
         );

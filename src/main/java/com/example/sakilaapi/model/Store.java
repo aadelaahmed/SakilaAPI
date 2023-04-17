@@ -17,7 +17,7 @@ import java.util.Set;
 public class Store implements Serializable {
     @Id
     @Column(name = "store_id", columnDefinition = "TINYINT UNSIGNED not null")
-    private Short id;
+    private Integer id;
 
     @NotNull
     @OneToOne(fetch = FetchType.LAZY, optional = false)
