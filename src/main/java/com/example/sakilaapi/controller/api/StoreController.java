@@ -1,6 +1,8 @@
 package com.example.sakilaapi.controller.api;
 
 import com.example.sakilaapi.dto.ActorDto;
+import com.example.sakilaapi.dto.StaffDto;
+import com.example.sakilaapi.dto.customer.CustomerSummaryDto;
 import com.example.sakilaapi.dto.store.StoreDto;
 import com.example.sakilaapi.dto.store.StoreSummaryDto;
 import com.example.sakilaapi.mapper.ActorMapper;
@@ -59,4 +61,21 @@ public class StoreController {
         service.deleteById(id);
         return Response.ok("Store was deleted successfully").build();
     }
+
+    @GET
+    @Path("/{storeId}/customers")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getAllCustomers(@PathParam("storeId") Integer storeId){
+       List<CustomerSummaryDto> customers = service.getAllCustomersByStoreId(storeId);
+       return Response.ok(customers).build();
+    }
+
+   /* @GET
+    @Path("/{storeId}/customers")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getAllStaff(@PathParam("storeId") Integer storeId){
+        List<StaffDto> customers = service.getAllStaffsByStoreId(storeId);
+        return Response.ok(customers).build();
+    }*/
+
 }

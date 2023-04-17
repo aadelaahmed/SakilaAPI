@@ -10,8 +10,10 @@ import com.example.sakilaapi.model.Actor;
 import com.example.sakilaapi.model.Store;
 import com.example.sakilaapi.repository.ActorRepository;
 import com.example.sakilaapi.repository.StoreRepository;
+import jakarta.persistence.EntityNotFoundException;
 
 import java.util.List;
+import java.util.Optional;
 
 public class StoreService extends BaseService<Store, StoreDto> {
     StoreRepository storeRepository;
@@ -38,5 +40,13 @@ public class StoreService extends BaseService<Store, StoreDto> {
     }
     public StoreSummaryDto getStoreSummaryById(Integer id){
         return storeRepository.getStoreSummaryById(id);
+    }
+
+    public List<CustomerSummaryDto> getAllCustomersByStoreId(Integer storeId) {
+        boolean isStoreExist = storeRepository.isExist(storeId);
+        if (!isStoreExist)
+            throw new EntityNotFoundException("Can't find store with id: "+storeId);
+        List<CustomerSummaryDto> customers = storeRepository.getAllCustomersByStoreId(storeId);
+        return customers;
     }
 }
