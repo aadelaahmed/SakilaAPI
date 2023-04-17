@@ -1,18 +1,24 @@
 package com.example.sakilaapi.service.rental;
 
+import com.example.sakilaapi.controller.request.FilmRentalRequest;
 import com.example.sakilaapi.dto.RentalDto;
 import com.example.sakilaapi.exception.EntityAlreadyExistException;
-import com.example.sakilaapi.model.Rental;
+import com.example.sakilaapi.model.*;
 import com.example.sakilaapi.mapper.RentalMapper;
-import com.example.sakilaapi.repository.RentalRepository;
+import com.example.sakilaapi.repository.*;
+import com.example.sakilaapi.util.Database;
+import jakarta.persistence.EntityNotFoundException;
 
+import java.time.Duration;
+import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
 import java.util.logging.LogManager;
 import java.util.logging.Logger;
 
-public class RentalServiceImpl implements RentalService{
+public class RentalServiceImpl implements RentalService {
     private RentalRepository rentalRepository;
+
     private RentalMapper rentalMapper;
     private static final Logger logger = LogManager.getLogManager().getLogger("RentalServiceImpl");
 
@@ -20,9 +26,19 @@ public class RentalServiceImpl implements RentalService{
         this.rentalRepository = new RentalRepository();
         this.rentalMapper = RentalMapper.INSTANCE;
     }
+
     @Override
     public List<RentalDto> getAllRentals() {
-        return null;
+        return Database.doInTransaction(
+                entityManager -> {
+                    List<Rental> rentals = rentalRepository.getAll(entityManager);
+                    System.out.println("rental entities ->" + rentals.get(2).toString());
+                    return rentalMapper.toDto(rentals);
+                }
+        );
+        /*List<Rental> rentals = rentalRepository.getAll();
+        System.out.println("rental entities ->" + rentals.get(2).toString());
+        return rentalMapper.toDto(rentals);*/
     }
 
     @Override
@@ -30,20 +46,49 @@ public class RentalServiceImpl implements RentalService{
         return Optional.empty();
     }
 
+
     @Override
-    public RentalDto createRental(RentalDto rentalDto) {
-        //firstly,ensures that there is no rental with this id in db.
-        Optional<Rental> optionalExistedRental = null;
-        if (rentalDto.getId() != null) {
-            optionalExistedRental = rentalRepository.getById(rentalDto.getId());
-            if (optionalExistedRental.isPresent())
-                throw new EntityAlreadyExistException("Rental already exists with id: " + rentalDto.getId());
-        }
-        Rental rental = rentalMapper.toEntity(rentalDto);
-        rental.setId(null);
-        System.out.println("rental obj which is saved in db -> " + rental.toString());
-        return rentalMapper.toDto(rentalRepository.save(rental));
+    public RentalDto createRental(FilmRentalRequest filmRentalRequest) {
+        /*//firstly,ensures that there is inventory with this id in db.
+        Integer filmId = filmRentalRequest.getFilmId();
+        Optional<Film> optionalFilm = filmRepository.getById(filmId);
+        if (!optionalFilm.isPresent())
+            throw new EntityNotFoundException("Can't find film of id: " + filmId);
+
+        //then,ensures that there is Customer with this id in db.
+        Integer customerId = filmRentalRequest.getCustomerId();
+        Optional<Customer> optionalCustomer = customerRepository.getById(customerId);
+        if (!optionalCustomer.isPresent())
+            throw new EntityNotFoundException("Can't find customer of id: " + customerId);
+
+        //then,ensures that there is Staff with this id in db.
+        Integer staffId = filmRentalRequest.getStaffId();
+        Optional<Staff> optionalStaff = staffRepository.getById(staffId);
+        if (!optionalStaff.isPresent())
+            throw new EntityNotFoundException("Can't find staff of id: " + staffId);
+        //create inventory object to set it in the rental.
+        Inventory inventory = new Inventory();
+        inventory.setFilm(optionalFilm.get());
+        inventory.setStore(customerRepository.getStoreByCustomerId(customerId));
+        //now, create the rental object to be saved in db.
+        Rental rental = new Rental();
+        rental.setCustomer(optionalCustomer.get());
+        rental.setStaff(optionalStaff.get());
+        rental.setInventory(inventory);
+        Instant rentalDate = Instant.now();
+        rental.setRentalDate(rentalDate);
+        Instant expectedReturnDate = getExpectedReturnDate(rentalDate);
+        rental.setReturnDate(expectedReturnDate);*/
+        Rental newInsertedRental = rentalRepository.save(filmRentalRequest);
+        System.out.println("rental obj which is saved in db -> " + newInsertedRental.toString());
+        return rentalMapper.toDto(newInsertedRental);
     }
+
+    private Instant getExpectedReturnDate(Instant rentalDate) {
+        return rentalDate.plus(Duration.ofDays(7));
+    }
+
+
 
     @Override
     public RentalDto updateRental(RentalDto rental) {

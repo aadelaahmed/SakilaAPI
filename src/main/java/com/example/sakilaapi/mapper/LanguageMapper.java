@@ -7,7 +7,12 @@ import com.example.sakilaapi.model.Language;
 import org.mapstruct.*;
 import org.mapstruct.factory.Mappers;
 
-@Mapper(unmappedTargetPolicy = ReportingPolicy.IGNORE, componentModel = MappingConstants.ComponentModel.CDI, uses = {FilmMapper.class, FilmMapper.class})
+/*@Mapper(unmappedTargetPolicy = ReportingPolicy.IGNORE,
+        componentModel = MappingConstants.ComponentModel.CDI,
+        uses = {FilmMapper.class, FilmMapper.class})*/
+@Mapper(unmappedTargetPolicy = ReportingPolicy.IGNORE,
+        componentModel = MappingConstants.ComponentModel.CDI)
+
 public interface LanguageMapper extends BaseMapper<LanguageDto, Language> {
     LanguageMapper INSTANCE = Mappers.getMapper(LanguageMapper.class);
 

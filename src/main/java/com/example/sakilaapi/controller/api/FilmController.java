@@ -1,7 +1,9 @@
-package com.example.sakilaapi.controller;
+package com.example.sakilaapi.controller.api;
 
 import com.example.sakilaapi.dto.ActorDto;
 import com.example.sakilaapi.dto.FilmDto;
+import com.example.sakilaapi.mapper.FilmMapper;
+import com.example.sakilaapi.repository.FilmRepository;
 import com.example.sakilaapi.service.film.FilmService;
 import com.example.sakilaapi.service.film.FilmServiceImpl;
 import jakarta.ws.rs.*;
@@ -17,12 +19,17 @@ import jakarta.ws.rs.Path;
 
 @Path("/films")
 public class FilmController {
-    private final FilmService service = new FilmServiceImpl();
+    //TODO -> USE IOC spring container HERE
+
+    private final FilmServiceImpl service = new FilmServiceImpl(
+            new FilmRepository(),
+            FilmMapper.INSTANCE
+    );
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Response getAll() {
-        List<FilmDto> filmDtos = service.getAllFilms();
+        List<FilmDto> filmDtos = service.getAll();
         GenericEntity<List<FilmDto>> entity = new GenericEntity<>(filmDtos) {
         };
         return Response.ok(entity).build();
@@ -32,7 +39,7 @@ public class FilmController {
     @Path("/{id}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getById(@PathParam("id") Integer id) {
-        Optional<FilmDto> optionalFilmDto = Optional.ofNullable(service.getFilmById(id));
+        Optional<FilmDto> optionalFilmDto = Optional.ofNullable(service.getById(id));
         return Response.ok().entity(
                 optionalFilmDto.get()
         ).build();
@@ -66,7 +73,6 @@ public class FilmController {
         List<FilmDto> filmDtos = service.getFilmsByCategoryId(categoryId);
         GenericEntity<List<FilmDto>> entity = new GenericEntity<List<FilmDto>>(filmDtos) {
         };
-
         return Response.ok(entity).build();
     }
 
@@ -74,11 +80,16 @@ public class FilmController {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response create(FilmDto filmDto) {
-        Optional<FilmDto> optionalFilmDto = Optional.ofNullable(service.saveFilm(filmDto));
-        if (optionalFilmDto.isPresent()) {
-            return Response.ok(optionalFilmDto.get()).build();
+        boolean isExisted = service.isExistFilmByTitle(filmDto.getTitle());
+        if (isExisted){
+            return Response.noContent().entity("The film is already existed").build();
+        }else {
+            Optional<FilmDto> optionalFilmDto = Optional.ofNullable(service.create(filmDto,filmDto.getId()));
+            if (optionalFilmDto.isPresent()) {
+                return Response.ok(optionalFilmDto.get()).build();
+            }
+            return Response.status(Response.Status.BAD_REQUEST).entity("Can't create this film").build();
         }
-        return Response.status(Response.Status.BAD_REQUEST).entity("Can't create this film").build();
     }
 
     @PUT
@@ -86,7 +97,7 @@ public class FilmController {
     @Consumes(MediaType.APPLICATION_JSON)
     public Response update(@PathParam("id") Integer id, FilmDto filmDto) {
         filmDto.setId(id);
-        Optional<FilmDto> optionalFilmDto = Optional.of(service.updateFilm(id,filmDto));
+        Optional<FilmDto> optionalFilmDto = Optional.of(service.update(id,filmDto));
         if (optionalFilmDto.isPresent()) {
             return Response.ok(optionalFilmDto.get()).build();
         }
@@ -97,7 +108,7 @@ public class FilmController {
     @DELETE
     @Path("/{id}")
     public Response deleteById(@PathParam("id") Integer id) {
-        service.deleteFilmById(id);
+        service.deleteById(id);
         return Response.ok("the film was deleted successfully").build();
     }
 }

@@ -5,6 +5,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.io.Serializable;
 import java.time.Instant;
 import java.util.LinkedHashSet;
 import java.util.Set;
@@ -13,7 +14,7 @@ import java.util.Set;
 @Setter
 @Entity
 @Table(name = "inventory")
-public class Inventory {
+public class Inventory implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "inventory_id", nullable = false)

@@ -1,5 +1,6 @@
-package com.example.sakilaapi.dto;
+package com.example.sakilaapi.dto.store;
 
+import com.example.sakilaapi.dto.StaffDto;
 import com.example.sakilaapi.model.AddressDto;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -16,7 +17,7 @@ import java.time.Instant;
 @AllArgsConstructor
 @NoArgsConstructor
 public class StoreDto implements Serializable {
-    private Short id;
+    private Integer id;
     @NotNull
     private StaffDto managerStaff;
     @NotNull
