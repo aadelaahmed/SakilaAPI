@@ -1,7 +1,6 @@
 package com.example.sakilaapi.controller.api;
 
 import com.example.sakilaapi.dto.ActorDto;
-import com.example.sakilaapi.dto.StaffDto;
 import com.example.sakilaapi.dto.customer.CustomerSummaryDto;
 import com.example.sakilaapi.dto.store.StoreDto;
 import com.example.sakilaapi.dto.store.StoreSummaryDto;
