@@ -6,6 +6,7 @@ import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.io.Serializable;
 import java.time.Instant;
 import java.util.LinkedHashSet;
 import java.util.Set;
@@ -14,7 +15,7 @@ import java.util.Set;
 @Setter
 @Entity
 @Table(name = "city")
-public class City {
+public class City implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "city_id", columnDefinition = "SMALLINT UNSIGNED not null")

@@ -1,6 +1,6 @@
 package com.example.sakilaapi.model;
 
-import com.example.sakilaapi.dto.CityDto;
+import com.example.sakilaapi.dto.city.CityDto;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;

@@ -1,5 +1,6 @@
 package com.example.sakilaapi.service.customer;
 
+import com.example.sakilaapi.dto.RentalDto;
 import com.example.sakilaapi.dto.customer.CustomerDto;
 import com.example.sakilaapi.dto.PaymentDto;
 import com.example.sakilaapi.dto.customer.CustomerSummaryDto;
@@ -37,11 +38,12 @@ public class CustomerServiceImpl extends BaseService<Customer, CustomerDto> {
         return summaries;
     }
 
-    /*public List<RentalDto> getRentalsByCustomerId(Integer categoryId) {
-        customerRepository.getRentalsByCustomerId(categoryId);
-        Customer customer = customerRepository.getById(id).orElse(null);
-        return customer != null ? rentalRepository.findAllByCustomer(customer).stream().map(RentalDto::fromEntity).collect(Collectors.toList()) : null;
-    }*/
+    public List<RentalDto> getRentalsByCustomerId(Integer categoryId) {
+        List<RentalDto> rentals = customerRepository.getRentalsByCustomerId(categoryId);
+        return rentals;
+//        Customer customer = customerRepository.getById(id).orElse(null);
+        //return customer != null ? rentalRepository.findAllByCustomer(customer).stream().map(RentalDto::fromEntity).collect(Collectors.toList()) : null;
+    }
 
     /*public List<PaymentDto> getPaymentsByCustomerId(Integer categoryId) {
         customerRepository.getPaymentsByCustomerId(categoryId);

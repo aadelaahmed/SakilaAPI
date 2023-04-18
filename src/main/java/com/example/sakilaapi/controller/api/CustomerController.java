@@ -1,5 +1,6 @@
 package com.example.sakilaapi.controller.api;
 
+import com.example.sakilaapi.dto.RentalDto;
 import com.example.sakilaapi.dto.customer.CustomerDto;
 import com.example.sakilaapi.dto.PaymentDto;
 import com.example.sakilaapi.dto.customer.CustomerSummaryDto;
@@ -24,7 +25,6 @@ public class CustomerController {
     );
 
 
-
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Response getAllCustomers() {
@@ -32,6 +32,13 @@ public class CustomerController {
         GenericEntity<List<CustomerSummaryDto>> entity = new GenericEntity<>(customers) {
         };
         return Response.ok(entity).build();
+    }
+
+    @GET
+    @Path("/{customerId}/rentals")
+    public Response getRentalsByCustomerId(@PathParam("customerId") Integer customerId){
+        List<RentalDto> rentalDtos = customerService.getRentalsByCustomerId(customerId);
+        return Response.ok(rentalDtos).build();
     }
 
     @GET
@@ -61,12 +68,17 @@ public class CustomerController {
     @Consumes(MediaType.APPLICATION_JSON)
     public Response update(@PathParam("id") Integer id, CustomerDto customerDto) {
         customerDto.setId(id);
-        Optional<CustomerDto> optionalCustomerDto = Optional.of(customerService.update(id,customerDto));
+        /*Optional<CustomerDto> optionalCustomerDto = Optional.of(customerService.update(id,customerDto));
         if (optionalCustomerDto.isPresent()){
             return Response.ok(optionalCustomerDto.get()).build();
         }
-        return Response.status(Response.Status.BAD_REQUEST)
-                .entity("can't update this customer").build();
+*/
+        boolean res = customerService.update(id, customerDto);
+        if (res) {
+            return Response.ok("Customer was updated successfully").build();
+        } else
+            return Response.status(Response.Status.BAD_REQUEST)
+                    .entity("can't update this Customer").build();
     }
 
     @DELETE
@@ -75,10 +87,11 @@ public class CustomerController {
         customerService.deleteById(id);
         return Response.ok("Customer was deleted successfully").build();
     }
+
     @GET
     @Path("/{id}/payments")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getPaymentsByCustomerId(@PathParam("id") Integer id){
+    public Response getPaymentsByCustomerId(@PathParam("id") Integer id) {
         //TODO -> check this endpoint
         List<PaymentDto> paymentDtos = customerService.getPaymentsByCustomerId(id);
         return Response.ok(paymentDtos).build();

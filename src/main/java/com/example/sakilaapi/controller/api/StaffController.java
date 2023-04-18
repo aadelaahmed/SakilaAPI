@@ -58,12 +58,12 @@ public class StaffController {
     @Consumes(MediaType.APPLICATION_JSON)
     public Response update(@PathParam("id") Integer id, StaffDto staffDto) {
         staffDto.setId(id);
-        Optional<StaffDto> optionalStaffDto = Optional.of(service.update(id,staffDto));
-        if (optionalStaffDto.isPresent()){
-            return Response.ok(optionalStaffDto.get()).build();
-        }
-        return Response.status(Response.Status.BAD_REQUEST)
-                .entity("can't update this staff").build();
+        boolean res = service.update(id, staffDto);
+        if (res) {
+            return Response.ok("Staff was updated successfully").build();
+        } else
+            return Response.status(Response.Status.BAD_REQUEST)
+                    .entity("can't update this Staff").build();
     }
 
     @DELETE

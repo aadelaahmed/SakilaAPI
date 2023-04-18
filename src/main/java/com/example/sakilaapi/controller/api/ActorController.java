@@ -59,9 +59,13 @@ public class ActorController {
     @Consumes(MediaType.APPLICATION_JSON)
     public Response update(@PathParam("id") Integer id, ActorDto actorDto) {
         actorDto.setId(id);
-        Optional<ActorDto> optionalActorDto = Optional.of(service.update(id,actorDto));
+        /*Optional<ActorDto> optionalActorDto = Optional.of(service.update(id,actorDto));
         if (optionalActorDto.isPresent()){
             return Response.ok(optionalActorDto.get()).build();
+        }*/
+        boolean res = service.update(id,actorDto);
+        if (res) {
+            return Response.ok("Actor was updated successfully").build();
         }
         return Response.status(Response.Status.BAD_REQUEST)
                 .entity("can't update this actor").build();

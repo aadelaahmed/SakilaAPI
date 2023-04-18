@@ -56,8 +56,13 @@ public class CategoryController {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response updateCategory(@PathParam("id") Integer id, CategoryDto categoryDto) {
-        CategoryDto updatedCategoryDto = categoryService.update(id, categoryDto);
-        return Response.ok(updatedCategoryDto).build();
+//        CategoryDto updatedCategoryDto = categoryService.update(id, categoryDto);
+        boolean res = categoryService.update(id,categoryDto);
+        if (res) {
+            return Response.ok("Category was updated successfully").build();
+        }else
+            return Response.status(Response.Status.BAD_REQUEST)
+                    .entity("can't update this Category").build();
     }
 
     @DELETE

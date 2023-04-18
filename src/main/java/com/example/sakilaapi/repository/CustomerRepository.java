@@ -1,7 +1,9 @@
 package com.example.sakilaapi.repository;
 
 import com.example.sakilaapi.dto.PaymentDto;
+import com.example.sakilaapi.dto.RentalDto;
 import com.example.sakilaapi.dto.customer.CustomerSummaryDto;
+import com.example.sakilaapi.mapper.RentalMapper;
 import com.example.sakilaapi.mapper.customer.CustomerSummaryMapper;
 import com.example.sakilaapi.mapper.PaymentMapper;
 import com.example.sakilaapi.model.*;
@@ -12,6 +14,7 @@ import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Predicate;
 import jakarta.persistence.criteria.Root;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class CustomerRepository extends BaseRepository<Customer, Integer> {
@@ -49,6 +52,25 @@ public class CustomerRepository extends BaseRepository<Customer, Integer> {
                     List<Customer> customers = getAll(entityManager);
                     CustomerSummaryMapper customerSummaryMapper = CustomerSummaryMapper.INSTANCE;
                     return customerSummaryMapper.toDto(customers);
+                }
+        );
+    }
+
+    public List<RentalDto> getRentalsByCustomerId(Integer customerId) {
+        return Database.doInTransaction(
+                entityManager -> {
+                    Customer customer = entityManager.find(Customer.class,customerId);
+                    if (customer == null)
+                        throw new EntityNotFoundException("Can't get Customer with id: "+customerId);
+                    RentalMapper rentalMapper = RentalMapper.INSTANCE;
+                    return rentalMapper.toDto(new ArrayList<>(customer.getRentals()));
+                    /*CriteriaBuilder builder = entityManager.getCriteriaBuilder();
+                    CriteriaQuery<Rental> query = builder.createQuery(Rental.class);
+                    Root<Rental> rentalRoot = query.from(Rental.class);
+                    Predicate customerIdPredicate = builder.equal(rentalRoot.get("customer").get("id"), customerId);
+                    query.where(customerIdPredicate);
+                    List<Rental> payments = entityManager.createQuery(query).getResultList();
+                    return rentalMapper.toDto(payments);*/
                 }
         );
     }

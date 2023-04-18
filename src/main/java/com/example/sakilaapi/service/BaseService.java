@@ -43,12 +43,26 @@ public abstract class BaseService<E extends Serializable, D> {
     }
 
     public D create(D dto, Integer id) {
-        if (id != null) {
+        if (id != null && dto != null) {
             Optional<E> optionalEntity = repository.getById(id);
             if (optionalEntity.isPresent()) {
                 throw new EntityAlreadyExistException(getEntityClass().getSimpleName() + " is already existed");
             }
-        }
+        }else
+            throw new EntityNotFoundException("Can't create this "+getEntityClass().getSimpleName());
+        E entity = mapper.toEntity(dto);
+        entity = repository.save(entity);
+        return mapper.toDto(entity);
+    }
+
+    public D createByName(D dto,String attributeName,String name){
+        if (name != null && dto != null) {
+            Optional<E> optionalEntity = repository.getByName(attributeName,name);
+            if (optionalEntity.isPresent()) {
+                throw new EntityAlreadyExistException(getEntityClass().getSimpleName() + " is already existed");
+            }
+        }else
+            throw new EntityNotFoundException("Can't create this "+getEntityClass().getSimpleName());
         E entity = mapper.toEntity(dto);
         entity = repository.save(entity);
         return mapper.toDto(entity);
@@ -68,14 +82,15 @@ public abstract class BaseService<E extends Serializable, D> {
             throw new EntityNotFoundException("Can't get the entity with id: " + id);
         }
     }*/
-    public D update(Integer id, D dto) {
+    public boolean update(Integer id, D dto) {
         return Database.doInTransaction(
                 entityManager -> {
                     Optional<E> optionalEntity = Optional.ofNullable(entityManager.find(getEntityClass(), id));
                     if (optionalEntity.isPresent()) {
                         E entity = optionalEntity.get();
                         mapper.partialUpdate(entity, dto);
-                        return mapper.toDto(repository.update(entity));
+//                        return mapper.toDto(entityManager.merge(entity));
+                        return true;
                     } else {
                         throw new EntityNotFoundException("Can't get "+getEntityClass().getSimpleName()+" with id: " + id);
                     }

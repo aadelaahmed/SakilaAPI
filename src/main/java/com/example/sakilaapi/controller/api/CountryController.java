@@ -65,12 +65,17 @@ public class CountryController {
     @Consumes(MediaType.APPLICATION_JSON)
     public Response update(@PathParam("id") Integer id, CountryDto countryDto) {
         countryDto.setId(id);
-        Optional<CountryDto> optionalCountryDto = Optional.of(countryService.update(id,countryDto));
+        /*Optional<CountryDto> optionalCountryDto = Optional.of(countryService.update(id,countryDto));
         if (optionalCountryDto.isPresent()){
             return Response.ok(optionalCountryDto.get()).build();
+        }*/
+
+        boolean res = countryService.update(id,countryDto);
+        if (res) {
+            return Response.ok("Country was updated successfully").build();
         }
         return Response.status(Response.Status.BAD_REQUEST)
-                .entity("can't update this country").build();
+                .entity("can't update this Country").build();
     }
 
     /*@DELETE

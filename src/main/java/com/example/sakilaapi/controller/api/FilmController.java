@@ -97,12 +97,12 @@ public class FilmController {
     @Consumes(MediaType.APPLICATION_JSON)
     public Response update(@PathParam("id") Integer id, FilmDto filmDto) {
         filmDto.setId(id);
-        Optional<FilmDto> optionalFilmDto = Optional.of(service.update(id,filmDto));
-        if (optionalFilmDto.isPresent()) {
-            return Response.ok(optionalFilmDto.get()).build();
-        }
-        return Response.status(Response.Status.BAD_REQUEST)
-                .entity("can't update this film").build();
+        boolean res = service.update(id, filmDto);
+        if (res) {
+            return Response.ok("Film was updated successfully").build();
+        } else
+            return Response.status(Response.Status.BAD_REQUEST)
+                    .entity("can't update this Film").build();
     }
 
     @DELETE
