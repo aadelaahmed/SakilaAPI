@@ -1,28 +1,37 @@
 package com.example.sakilaapi.repository;
 
 import com.example.sakilaapi.controller.request.FilmRentalRequest;
+import com.example.sakilaapi.dto.rental.RentalDto;
+import com.example.sakilaapi.dto.rental.RentalSummaryDto;
+import com.example.sakilaapi.mapper.rental.RentalMapper;
+import com.example.sakilaapi.mapper.rental.RentalSummaryMapper;
 import com.example.sakilaapi.model.*;
 import com.example.sakilaapi.util.Database;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.persistence.criteria.CriteriaBuilder;
+import jakarta.persistence.criteria.CriteriaQuery;
+import jakarta.persistence.criteria.Root;
 
 import java.time.Duration;
 import java.time.Instant;
+import java.util.List;
 import java.util.Optional;
 
 public class RentalRepository extends BaseRepository<Rental, Integer> {
+    RentalSummaryMapper summaryMapper;
     public RentalRepository(){
         super(Rental.class);
+        this.summaryMapper = RentalSummaryMapper.INSTANCE;
     }
 
 
-    public Rental save(FilmRentalRequest filmRentalRequest) {
+    public RentalSummaryDto save(FilmRentalRequest filmRentalRequest) {
         return Database.doInTransaction(entityManager -> {
             //firstly,ensures that there is inventory with this id in db.
             Integer filmId = filmRentalRequest.getFilmId();
             Film film =entityManager.find(Film.class,filmId);
             if (film == null)
                 throw new EntityNotFoundException("Can't find film of id: " + filmId);
-
             //then,ensures that there is Customer with this id in db.
             Integer customerId = filmRentalRequest.getCustomerId();
             Customer customer = entityManager.find(Customer.class,customerId);
@@ -50,10 +59,43 @@ public class RentalRepository extends BaseRepository<Rental, Integer> {
             Instant expectedReturnDate = getExpectedReturnDate(rentalDate);
             rental.setReturnDate(expectedReturnDate);
             rental = entityManager.merge(rental);
-            return rental;
+            return summaryMapper.toDto(rental);
+            //return rentalMapper.toDto(rental);
         });
     }
     private Instant getExpectedReturnDate(Instant rentalDate) {
         return rentalDate.plus(Duration.ofDays(7));
+    }
+
+    public List<RentalSummaryDto> getRentalSummaries() {
+        return Database.doInTransaction(
+                entityManager -> {
+                    CriteriaBuilder builder = entityManager.getCriteriaBuilder();
+                    CriteriaQuery<Rental> query = builder.createQuery(Rental.class);
+                    Root<Rental> root = query.from(Rental.class);
+                    query.select(root);
+                    List<Rental> rentals = entityManager.createQuery(query).getResultList();
+                    if (rentals.isEmpty())
+                        throw new EntityNotFoundException("There are no rentals");
+                    return summaryMapper.toDto(rentals);
+                }
+        );
+    }
+
+    public RentalSummaryDto getRentalSummaryById(Integer rentalId) {
+        return Database.doInTransaction(
+                entityManager -> {
+                    CriteriaBuilder builder = entityManager.getCriteriaBuilder();
+                    CriteriaQuery<Rental> query = builder.createQuery(Rental.class);
+                    Root<Rental> root = query.from(Rental.class);
+                    query.select(root)
+                            .where(builder.equal(root.get("id"), rentalId)); // Add predicate to filter by rentalId
+                    List<Rental> rentals = entityManager.createQuery(query).getResultList();
+                    if (rentals.isEmpty()) {
+                        throw new EntityNotFoundException("There are no rentals with id: " + rentalId);
+                    }
+                    return summaryMapper.toDto(rentals.get(0));
+                }
+        );
     }
 }

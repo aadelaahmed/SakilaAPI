@@ -6,9 +6,12 @@ import com.example.sakilaapi.mapper.BaseMapper;
 import com.example.sakilaapi.model.Customer;
 import com.example.sakilaapi.model.Rental;
 import org.mapstruct.*;
+import org.mapstruct.factory.Mappers;
 
 @Mapper(unmappedTargetPolicy = ReportingPolicy.IGNORE, componentModel = MappingConstants.ComponentModel.CDI)
 public interface RentalSummaryMapper extends BaseMapper<RentalSummaryDto, Rental> {
+    RentalSummaryMapper INSTANCE = Mappers.getMapper(RentalSummaryMapper.class);
+
     @Mapping(target = "customerEmail",source = "customer.email")
     @Mapping(target = "storeId",source = "staff.store.id")
     @Mapping(target = "id",source = "id")
