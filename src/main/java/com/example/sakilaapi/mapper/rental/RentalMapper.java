@@ -1,6 +1,7 @@
-package com.example.sakilaapi.mapper;
+package com.example.sakilaapi.mapper.rental;
 
-import com.example.sakilaapi.dto.RentalDto;
+import com.example.sakilaapi.dto.rental.RentalDto;
+import com.example.sakilaapi.mapper.BaseMapper;
 import com.example.sakilaapi.model.Rental;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingConstants;

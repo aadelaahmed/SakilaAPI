@@ -2,7 +2,7 @@ package com.example.sakilaapi.service.customer;
 
 import com.example.sakilaapi.dto.customer.CustomerDto;
 import com.example.sakilaapi.dto.PaymentDto;
-import com.example.sakilaapi.dto.RentalDto;
+import com.example.sakilaapi.dto.rental.RentalDto;
 
 import java.util.List;
 

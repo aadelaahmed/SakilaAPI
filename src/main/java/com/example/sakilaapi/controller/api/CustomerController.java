@@ -1,6 +1,6 @@
 package com.example.sakilaapi.controller.api;
 
-import com.example.sakilaapi.dto.RentalDto;
+import com.example.sakilaapi.dto.rental.RentalDto;
 import com.example.sakilaapi.dto.customer.CustomerDto;
 import com.example.sakilaapi.dto.PaymentDto;
 import com.example.sakilaapi.dto.customer.CustomerSummaryDto;

@@ -1,5 +1,6 @@
 package com.example.sakilaapi.dto;
 
+import com.example.sakilaapi.dto.rental.RentalDto;
 import com.example.sakilaapi.dto.staff.StaffDto;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;

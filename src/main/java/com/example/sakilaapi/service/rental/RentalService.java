@@ -1,7 +1,7 @@
 package com.example.sakilaapi.service.rental;
 
 import com.example.sakilaapi.controller.request.FilmRentalRequest;
-import com.example.sakilaapi.dto.RentalDto;
+import com.example.sakilaapi.dto.rental.RentalDto;
 
 import java.util.List;
 import java.util.Optional;

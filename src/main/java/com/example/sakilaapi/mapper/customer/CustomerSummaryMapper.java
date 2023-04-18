@@ -2,6 +2,7 @@ package com.example.sakilaapi.mapper.customer;
 
 import com.example.sakilaapi.dto.customer.CustomerSummaryDto;
 import com.example.sakilaapi.mapper.*;
+import com.example.sakilaapi.mapper.rental.RentalMapper;
 import com.example.sakilaapi.mapper.store.StoreMapper;
 import com.example.sakilaapi.model.Customer;
 import org.mapstruct.*;

@@ -1,13 +1,11 @@
 package com.example.sakilaapi.service.rental;
 
 import com.example.sakilaapi.controller.request.FilmRentalRequest;
-import com.example.sakilaapi.dto.RentalDto;
-import com.example.sakilaapi.exception.EntityAlreadyExistException;
+import com.example.sakilaapi.dto.rental.RentalDto;
 import com.example.sakilaapi.model.*;
-import com.example.sakilaapi.mapper.RentalMapper;
+import com.example.sakilaapi.mapper.rental.RentalMapper;
 import com.example.sakilaapi.repository.*;
 import com.example.sakilaapi.util.Database;
-import jakarta.persistence.EntityNotFoundException;
 
 import java.time.Duration;
 import java.time.Instant;

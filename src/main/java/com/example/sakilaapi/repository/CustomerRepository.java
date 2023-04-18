@@ -1,9 +1,9 @@
 package com.example.sakilaapi.repository;
 
 import com.example.sakilaapi.dto.PaymentDto;
-import com.example.sakilaapi.dto.RentalDto;
+import com.example.sakilaapi.dto.rental.RentalDto;
 import com.example.sakilaapi.dto.customer.CustomerSummaryDto;
-import com.example.sakilaapi.mapper.RentalMapper;
+import com.example.sakilaapi.mapper.rental.RentalMapper;
 import com.example.sakilaapi.mapper.customer.CustomerSummaryMapper;
 import com.example.sakilaapi.mapper.PaymentMapper;
 import com.example.sakilaapi.model.*;

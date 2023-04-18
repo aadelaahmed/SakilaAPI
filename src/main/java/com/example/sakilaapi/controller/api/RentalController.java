@@ -1,7 +1,7 @@
 package com.example.sakilaapi.controller.api;
 import com.example.sakilaapi.controller.request.FilmRentalRequest;
-import com.example.sakilaapi.dto.ActorDto;
-import com.example.sakilaapi.dto.RentalDto;
+import com.example.sakilaapi.dto.rental.RentalDto;
+import com.example.sakilaapi.dto.rental.RentalSummaryDto;
 import com.example.sakilaapi.service.rental.RentalService;
 import com.example.sakilaapi.service.rental.RentalServiceImpl;
 import jakarta.ws.rs.*;
@@ -29,9 +29,9 @@ public class RentalController {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Response getAll() {
-        List<RentalDto> rentalDtos = service.getAllRentals();
-        System.out.println(rentalDtos.stream().limit(3));
-        GenericEntity entity = new GenericEntity<>(rentalDtos) {
+        List<RentalSummaryDto> summaries = service.getAllRentals();
+        System.out.println(summaries.stream().limit(3));
+        GenericEntity entity = new GenericEntity<>(summaries) {
         };
         return Response.ok(entity).build();
     }
