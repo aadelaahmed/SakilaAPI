@@ -1,16 +1,11 @@
 package com.example.sakilaapi.controller.api;
 
-import com.example.sakilaapi.dto.ActorDto;
 import com.example.sakilaapi.dto.customer.CustomerSummaryDto;
 import com.example.sakilaapi.dto.store.StoreDto;
 import com.example.sakilaapi.dto.store.StoreSummaryDto;
-import com.example.sakilaapi.mapper.ActorMapper;
 import com.example.sakilaapi.mapper.store.StoreMapper;
-import com.example.sakilaapi.model.Store;
-import com.example.sakilaapi.repository.ActorRepository;
 import com.example.sakilaapi.repository.StoreRepository;
-import com.example.sakilaapi.service.StoreService;
-import com.example.sakilaapi.service.actor.ActorServiceImpl;
+import com.example.sakilaapi.service.store.StoreService;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.GenericEntity;
 import jakarta.ws.rs.core.MediaType;
@@ -21,7 +16,6 @@ import java.util.Optional;
 
 @Path("/stores")
 public class StoreController {
-    //TODO -> USE IOC spring container HERE
     private final StoreService service = new StoreService(
             new StoreRepository(), StoreMapper.INSTANCE
     );

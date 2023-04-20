@@ -1,4 +1,4 @@
-package com.example.sakilaapi.service;
+package com.example.sakilaapi.service.staff;
 
 import com.example.sakilaapi.dto.staff.StaffDto;
 import com.example.sakilaapi.dto.staff.StaffSummaryDto;
@@ -12,6 +12,7 @@ import com.example.sakilaapi.model.Store;
 import com.example.sakilaapi.repository.BaseRepository;
 import com.example.sakilaapi.repository.StaffRepository;
 import com.example.sakilaapi.repository.StoreRepository;
+import com.example.sakilaapi.service.BaseService;
 
 import java.util.List;
 

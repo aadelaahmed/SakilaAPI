@@ -1,14 +1,10 @@
 package com.example.sakilaapi.controller.api;
 
-import com.example.sakilaapi.dto.ActorDto;
 import com.example.sakilaapi.dto.staff.StaffDto;
 import com.example.sakilaapi.dto.staff.StaffSummaryDto;
-import com.example.sakilaapi.mapper.ActorMapper;
 import com.example.sakilaapi.mapper.staff.StaffMapper;
-import com.example.sakilaapi.repository.ActorRepository;
 import com.example.sakilaapi.repository.StaffRepository;
-import com.example.sakilaapi.service.StaffService;
-import com.example.sakilaapi.service.actor.ActorServiceImpl;
+import com.example.sakilaapi.service.staff.StaffService;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.GenericEntity;
 import jakarta.ws.rs.core.MediaType;
@@ -58,9 +54,9 @@ public class StaffController {
     @Consumes(MediaType.APPLICATION_JSON)
     public Response update(@PathParam("id") Integer id, StaffDto staffDto) {
         staffDto.setId(id);
-        boolean res = service.update(id, staffDto);
-        if (res) {
-            return Response.ok("Staff was updated successfully").build();
+        StaffDto res = service.update(id, staffDto);
+        if (res != null) {
+            return Response.ok(res).build();
         } else
             return Response.status(Response.Status.BAD_REQUEST)
                     .entity("can't update this Staff").build();

@@ -1,20 +1,15 @@
 package com.example.sakilaapi.controller.api;
 
 import com.example.sakilaapi.dto.CountryDto;
-import com.example.sakilaapi.dto.PaymentDto;
-import com.example.sakilaapi.dto.customer.CustomerDto;
-import com.example.sakilaapi.dto.customer.CustomerSummaryDto;
 import com.example.sakilaapi.mapper.country.CountryMapper;
-import com.example.sakilaapi.mapper.customer.CustomerMapper;
 import com.example.sakilaapi.repository.CountryRepository;
-import com.example.sakilaapi.repository.CustomerRepository;
 import com.example.sakilaapi.service.country.CountryService;
-import com.example.sakilaapi.service.customer.CustomerServiceImpl;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.GenericEntity;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 
+import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
 
@@ -65,14 +60,10 @@ public class CountryController {
     @Consumes(MediaType.APPLICATION_JSON)
     public Response update(@PathParam("id") Integer id, CountryDto countryDto) {
         countryDto.setId(id);
-        /*Optional<CountryDto> optionalCountryDto = Optional.of(countryService.update(id,countryDto));
-        if (optionalCountryDto.isPresent()){
-            return Response.ok(optionalCountryDto.get()).build();
-        }*/
-
-        boolean res = countryService.update(id,countryDto);
-        if (res) {
-            return Response.ok("Country was updated successfully").build();
+        countryDto.setLastUpdate(Instant.now());
+        CountryDto res = countryService.update(id,countryDto);
+        if (res != null) {
+            return Response.ok(res).build();
         }
         return Response.status(Response.Status.BAD_REQUEST)
                 .entity("can't update this Country").build();

@@ -1,19 +1,16 @@
 package com.example.sakilaapi.controller.api;
 
 
-import com.example.sakilaapi.dto.ActorDto;
 import com.example.sakilaapi.dto.city.CityDto;
-import com.example.sakilaapi.mapper.ActorMapper;
 import com.example.sakilaapi.mapper.city.CityMapper;
-import com.example.sakilaapi.repository.ActorRepository;
 import com.example.sakilaapi.repository.CityRepository;
-import com.example.sakilaapi.service.CityService;
-import com.example.sakilaapi.service.actor.ActorServiceImpl;
+import com.example.sakilaapi.service.city.CityService;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.GenericEntity;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 
+import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
 
@@ -26,7 +23,7 @@ public class CityController {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getAll() {
+    public Response getAllCities() {
         List<CityDto> cityDtos = service.getAll();
         System.out.println(cityDtos.stream().limit(3));
         GenericEntity entity = new GenericEntity<>(cityDtos) {
@@ -37,7 +34,7 @@ public class CityController {
     @GET
     @Path("/{id}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getById(@PathParam("id") Integer id) {
+    public Response getCityBy(@PathParam("id") Integer id) {
         Optional<CityDto> optionalCityDto = Optional.ofNullable(service.getCityById(id));
         return Response.ok().entity(
                 optionalCityDto.get()
@@ -47,7 +44,8 @@ public class CityController {
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response create(CityDto cityDto) {
+    public Response createCity(CityDto cityDto) {
+        cityDto.setLastUpdate(Instant.now());
         Optional<CityDto> optionalCityDto = Optional.ofNullable(service.createByName(cityDto, "city", cityDto.getCity()));
         if (optionalCityDto.isPresent()) {
             return Response.ok(optionalCityDto.get()).build();
@@ -60,10 +58,11 @@ public class CityController {
     @Consumes(MediaType.APPLICATION_JSON)
     public Response update(@PathParam("id") Integer id, CityDto cityDto) {
         cityDto.setId(id);
-//        Optional<CityDto> optionalCityDto = Optional.of(service.update(id, cityDto));
-        boolean res = service.update(id,cityDto);
-        if (res) {
-            return Response.ok("City was updated successfully").build();
+        cityDto.setLastUpdate(Instant.now());
+        cityDto.setId(null);
+        CityDto res = service.update(id,cityDto);
+        if (res != null) {
+            return Response.ok(res).build();
         }
         return Response.status(Response.Status.BAD_REQUEST)
                 .entity("can't update this city").build();

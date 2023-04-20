@@ -82,15 +82,14 @@ public abstract class BaseService<E extends Serializable, D> {
             throw new EntityNotFoundException("Can't get the entity with id: " + id);
         }
     }*/
-    public boolean update(Integer id, D dto) {
+    public D update(Integer id, D dto) {
         return Database.doInTransaction(
                 entityManager -> {
                     Optional<E> optionalEntity = Optional.ofNullable(entityManager.find(getEntityClass(), id));
                     if (optionalEntity.isPresent()) {
                         E entity = optionalEntity.get();
                         mapper.partialUpdate(entity, dto);
-//                        return mapper.toDto(entityManager.merge(entity));
-                        return true;
+                        return mapper.toDto(entityManager.merge(entity));
                     } else {
                         throw new EntityNotFoundException("Can't get "+getEntityClass().getSimpleName()+" with id: " + id);
                     }

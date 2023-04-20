@@ -1,4 +1,4 @@
-package com.example.sakilaapi.service;
+package com.example.sakilaapi.service.store;
 
 import com.example.sakilaapi.dto.ActorDto;
 import com.example.sakilaapi.dto.customer.CustomerSummaryDto;
@@ -10,6 +10,7 @@ import com.example.sakilaapi.model.Actor;
 import com.example.sakilaapi.model.Store;
 import com.example.sakilaapi.repository.ActorRepository;
 import com.example.sakilaapi.repository.StoreRepository;
+import com.example.sakilaapi.service.BaseService;
 import jakarta.persistence.EntityNotFoundException;
 
 import java.util.List;

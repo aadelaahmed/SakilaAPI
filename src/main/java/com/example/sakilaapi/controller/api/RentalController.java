@@ -1,14 +1,9 @@
 package com.example.sakilaapi.controller.api;
 import com.example.sakilaapi.controller.request.FilmRentalRequest;
-import com.example.sakilaapi.dto.rental.RentalDto;
 import com.example.sakilaapi.dto.rental.RentalSummaryDto;
-import com.example.sakilaapi.mapper.ActorMapper;
 import com.example.sakilaapi.mapper.rental.RentalMapper;
-import com.example.sakilaapi.repository.ActorRepository;
 import com.example.sakilaapi.repository.RentalRepository;
-import com.example.sakilaapi.service.actor.ActorServiceImpl;
 import com.example.sakilaapi.service.rental.RentalService;
-import com.example.sakilaapi.service.rental.RentalServiceImpl;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.GenericEntity;
 import jakarta.ws.rs.core.MediaType;
@@ -16,12 +11,11 @@ import jakarta.ws.rs.core.Response;
 
 
 import java.util.List;
-import java.util.Optional;
 
 @Path("/rentals")
 public class RentalController {
     //TODO -> USE IOC spring container HERE
-    private final RentalServiceImpl service = new RentalServiceImpl(
+    private final RentalService service = new RentalService(
             new RentalRepository(), RentalMapper.INSTANCE
     );
     @POST

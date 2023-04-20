@@ -1,27 +1,27 @@
 package com.example.sakilaapi.controller.api;
 
 
-import com.example.sakilaapi.controller.request.FilmCategoryRequest;
+import com.example.sakilaapi.dto.ActorDto;
 import com.example.sakilaapi.dto.CategoryDto;
 import com.example.sakilaapi.dto.FilmDto;
 import com.example.sakilaapi.mapper.CategoryMapper;
-import com.example.sakilaapi.model.Category;
 import com.example.sakilaapi.repository.CategoryRepository;
 import com.example.sakilaapi.service.category.CategoryService;
-import com.example.sakilaapi.service.category.CategoryServiceImpl;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.GenericEntity;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 
+import java.time.Instant;
 import java.util.List;
+import java.util.Optional;
 
 
 @Path("/categories")
 public class CategoryController {
     //TODO -> USE IOC spring container HERE
 
-    private final CategoryServiceImpl categoryService = new CategoryServiceImpl(
+    private final CategoryService categoryService = new CategoryService(
             new CategoryRepository(), CategoryMapper.INSTANCE
     );
 
@@ -47,8 +47,13 @@ public class CategoryController {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response createCategory(CategoryDto categoryDto) {
-        CategoryDto createdCategoryDto = categoryService.create(categoryDto,categoryDto.getId());
-        return Response.ok(createdCategoryDto).build();
+        categoryDto.setId(null);
+        categoryDto.setLastUpdate(Instant.now());
+        Optional<CategoryDto> optionalCategoryDto = Optional.ofNullable(categoryService.createByName(categoryDto,"name",categoryDto.getName()));
+        if (optionalCategoryDto.isPresent()){
+            return Response.ok(optionalCategoryDto.get()).build();
+        }
+        return Response.status(Response.Status.BAD_REQUEST).entity("Can't create category").build();
     }
 
     @PUT
@@ -56,10 +61,11 @@ public class CategoryController {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response updateCategory(@PathParam("id") Integer id, CategoryDto categoryDto) {
-//        CategoryDto updatedCategoryDto = categoryService.update(id, categoryDto);
-        boolean res = categoryService.update(id,categoryDto);
-        if (res) {
-            return Response.ok("Category was updated successfully").build();
+        categoryDto.setLastUpdate(Instant.now());
+        categoryDto.setId(null);
+        CategoryDto res = categoryService.update(id,categoryDto);
+        if (res!=null) {
+            return Response.ok(res).build();
         }else
             return Response.status(Response.Status.BAD_REQUEST)
                     .entity("can't update this Category").build();
@@ -69,7 +75,7 @@ public class CategoryController {
     @Path("/{id}")
     public Response deleteCategory(@PathParam("id") Integer id) {
         categoryService.deleteById(id);
-        return Response.noContent().entity("Category was deleted successfully").build();
+        return Response.ok("Category was deleted successfully").build();
     }
     @POST
     @Path("{categoryId}")

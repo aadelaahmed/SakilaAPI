@@ -6,12 +6,13 @@ import com.example.sakilaapi.dto.PaymentDto;
 import com.example.sakilaapi.dto.customer.CustomerSummaryDto;
 import com.example.sakilaapi.mapper.customer.CustomerMapper;
 import com.example.sakilaapi.repository.CustomerRepository;
-import com.example.sakilaapi.service.customer.CustomerServiceImpl;
+import com.example.sakilaapi.service.customer.CustomerService;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.GenericEntity;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 
+import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
 
@@ -19,7 +20,7 @@ import java.util.Optional;
 public class CustomerController {
     //TODO -> USE IOC spring container HERE
 
-    private final CustomerServiceImpl customerService = new CustomerServiceImpl(
+    private final CustomerService customerService = new CustomerService(
             new CustomerRepository(),
             CustomerMapper.INSTANCE
     );
@@ -68,14 +69,10 @@ public class CustomerController {
     @Consumes(MediaType.APPLICATION_JSON)
     public Response update(@PathParam("id") Integer id, CustomerDto customerDto) {
         customerDto.setId(id);
-        /*Optional<CustomerDto> optionalCustomerDto = Optional.of(customerService.update(id,customerDto));
-        if (optionalCustomerDto.isPresent()){
-            return Response.ok(optionalCustomerDto.get()).build();
-        }
-*/
-        boolean res = customerService.update(id, customerDto);
-        if (res) {
-            return Response.ok("Customer was updated successfully").build();
+        customerDto.setLastUpdate(Instant.now());
+        CustomerDto res = customerService.update(id, customerDto);
+        if (res != null) {
+            return Response.ok(res).build();
         } else
             return Response.status(Response.Status.BAD_REQUEST)
                     .entity("can't update this Customer").build();
