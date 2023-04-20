@@ -38,6 +38,19 @@ public class CustomerController {
         return Response.ok(entity).build();
     }
 
+    @PUT
+    @Path("/{id}")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response updateCustomer(@PathParam("id") Integer id, CustomerDto customerDto) {
+        customerDto.setId(id);
+        CustomerDto res = customerService.update(id, customerDto);
+        if (res != null) {
+            return Response.ok(res).build();
+        } else
+            return Response.status(Response.Status.BAD_REQUEST)
+                    .entity("can't update this Staff").build();
+    }
+
     @GET
     @Path("/{customerId}/rentals")
     public Response getRentalsByCustomerId(@PathParam("customerId") Integer customerId){
