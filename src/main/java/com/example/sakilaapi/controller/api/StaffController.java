@@ -10,6 +10,7 @@ import jakarta.ws.rs.core.GenericEntity;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 
+import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
 
@@ -22,7 +23,7 @@ public class StaffController {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getAll() {
+    public Response getAllStaff() {
         List<StaffSummaryDto> staffs = service.getStaffSummaries();
         System.out.println(staffs.stream().limit(3));
         GenericEntity entity = new GenericEntity<>(staffs) {
@@ -32,7 +33,7 @@ public class StaffController {
     @GET
     @Path("/{id}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getById(@PathParam("id") Integer id) {
+    public Response getStaffById(@PathParam("id") Integer id) {
         Optional<StaffSummaryDto> optionalStaff = Optional.ofNullable(service.getStoreSummaryById(id));
         return Response.ok().entity(
                 optionalStaff.get()
@@ -41,8 +42,9 @@ public class StaffController {
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response create(StaffDto staffDto) {
-        Optional<StaffDto> optionalStaffDto = Optional.ofNullable(service.create(staffDto,staffDto.getId()));
+    public Response createStaff(StaffDto staffDto) {
+        staffDto.setLastUpdate(Instant.now());
+        Optional<StaffSummaryDto> optionalStaffDto = Optional.ofNullable(service.createStaffByEmail(staffDto));
         if (optionalStaffDto.isPresent()){
             return Response.ok(optionalStaffDto.get()).build();
         }
@@ -52,7 +54,7 @@ public class StaffController {
     @PUT
     @Path("/{id}")
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response update(@PathParam("id") Integer id, StaffDto staffDto) {
+    public Response updateStaff(@PathParam("id") Integer id, StaffDto staffDto) {
         staffDto.setId(id);
         StaffDto res = service.update(id, staffDto);
         if (res != null) {

@@ -5,6 +5,8 @@ import com.example.sakilaapi.dto.customer.CustomerDto;
 import com.example.sakilaapi.dto.PaymentDto;
 import com.example.sakilaapi.dto.customer.CustomerSummaryDto;
 import com.example.sakilaapi.dto.rental.RentalSummaryDto;
+import com.example.sakilaapi.dto.staff.StaffDto;
+import com.example.sakilaapi.dto.staff.StaffSummaryDto;
 import com.example.sakilaapi.mapper.customer.CustomerMapper;
 import com.example.sakilaapi.repository.CustomerRepository;
 import com.example.sakilaapi.service.customer.CustomerService;
@@ -53,7 +55,18 @@ public class CustomerController {
         }
         return Response.status(Response.Status.NOT_FOUND).entity("Customer with id " + id + " not found").build();
     }
-
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response createCustomer(CustomerDto customerDto) {
+        customerDto.setLastUpdate(Instant.now());
+        customerDto.setCreateDate(Instant.now());
+        Optional<CustomerSummaryDto> optionalCustomerSummaryDto = Optional.ofNullable(customerService.createCustomerByEmail(customerDto));
+        if (optionalCustomerSummaryDto.isPresent()){
+            return Response.ok(optionalCustomerSummaryDto.get()).build();
+        }
+        return Response.status(Response.Status.BAD_REQUEST).entity("Can't create customer member").build();
+    }
     @DELETE
     @Path("/{id}")
     public Response deleteById(@PathParam("id") Integer id) {

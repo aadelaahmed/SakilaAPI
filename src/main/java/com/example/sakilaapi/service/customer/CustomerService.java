@@ -67,6 +67,8 @@ public class CustomerService extends BaseService<Customer, CustomerDto> {
     }
 
 
-
+    public CustomerSummaryDto createCustomerByEmail(CustomerDto customerDto) {
+        return customerRepository.createCustomerByEmail(customerDto);
+    }
 }
 

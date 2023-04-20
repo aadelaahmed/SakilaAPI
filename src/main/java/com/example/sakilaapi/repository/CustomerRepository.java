@@ -1,9 +1,12 @@
 package com.example.sakilaapi.repository;
 
 import com.example.sakilaapi.dto.PaymentDto;
+import com.example.sakilaapi.dto.customer.CustomerDto;
 import com.example.sakilaapi.dto.rental.RentalDto;
 import com.example.sakilaapi.dto.customer.CustomerSummaryDto;
 import com.example.sakilaapi.dto.rental.RentalSummaryDto;
+import com.example.sakilaapi.exception.EntityAlreadyExistException;
+import com.example.sakilaapi.mapper.customer.CustomerMapper;
 import com.example.sakilaapi.mapper.rental.RentalMapper;
 import com.example.sakilaapi.mapper.customer.CustomerSummaryMapper;
 import com.example.sakilaapi.mapper.PaymentMapper;
@@ -18,10 +21,15 @@ import jakarta.persistence.criteria.Root;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class CustomerRepository extends BaseRepository<Customer, Integer> {
+    CustomerMapper customerMapper;
+    CustomerSummaryMapper customerSummaryMapper;
     public CustomerRepository() {
         super(Customer.class);
+        this.customerMapper = CustomerMapper.INSTANCE;
+        this.customerSummaryMapper = CustomerSummaryMapper.INSTANCE;
     }
 
     public Store getStoreByCustomerId(Integer customerId) {
@@ -76,6 +84,28 @@ public class CustomerRepository extends BaseRepository<Customer, Integer> {
                         throw new EntityNotFoundException("Can't get Customer with id: "+customerId);
                     RentalSummaryMapper rentalSummaryMapper = RentalSummaryMapper.INSTANCE;
                     return rentalSummaryMapper.toDto(new ArrayList<>(customer.getRentals()));
+                }
+        );
+    }
+
+    public CustomerSummaryDto createCustomerByEmail(CustomerDto customerDto) {
+        return Database.doInTransaction(
+                entityManager -> {
+                    if (customerDto.getEmail() != null && customerDto != null) {
+                        Optional<Customer> optionalEntity = getByName("email",customerDto.getEmail());
+                        if (optionalEntity.isPresent()) {
+                            throw new EntityAlreadyExistException("Customer is already existed");
+                        }
+                    }else
+                        throw new EntityNotFoundException("Can't create this customer");
+                    Customer customer = customerMapper.toEntity(customerDto);
+                    //get store first and set it to new created customer
+                    Store store = entityManager.find(Store.class,customerDto.getStoreId());
+                    if (store==null)
+                        throw new EntityNotFoundException("Can't find store with id: "+customerDto.getStoreId());
+                    customer.setStore(store);
+                    customer = save(customer);
+                    return customerSummaryMapper.toDto(customer);
                 }
         );
     }

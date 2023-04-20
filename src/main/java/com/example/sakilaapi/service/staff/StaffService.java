@@ -42,4 +42,7 @@ public class StaffService extends BaseService<Staff, StaffDto> {
     public List<StaffSummaryDto> getStaffSummaries() {
         return staffRepository.getStaffSummaries();
     }
+    public StaffSummaryDto createStaffByEmail(StaffDto staffDto) {
+        return staffRepository.createStaffByEmail(staffDto);
+    }
 }
