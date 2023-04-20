@@ -3,9 +3,11 @@ package com.example.sakilaapi.repository;
 import com.example.sakilaapi.dto.PaymentDto;
 import com.example.sakilaapi.dto.rental.RentalDto;
 import com.example.sakilaapi.dto.customer.CustomerSummaryDto;
+import com.example.sakilaapi.dto.rental.RentalSummaryDto;
 import com.example.sakilaapi.mapper.rental.RentalMapper;
 import com.example.sakilaapi.mapper.customer.CustomerSummaryMapper;
 import com.example.sakilaapi.mapper.PaymentMapper;
+import com.example.sakilaapi.mapper.rental.RentalSummaryMapper;
 import com.example.sakilaapi.model.*;
 import com.example.sakilaapi.util.Database;
 import jakarta.persistence.EntityNotFoundException;
@@ -55,22 +57,25 @@ public class CustomerRepository extends BaseRepository<Customer, Integer> {
                 }
         );
     }
+    public CustomerSummaryDto getCustomerSummariesById(Integer customerId) {
+        return Database.doInTransaction(
+                entityManager -> {
+                    Customer customer = entityManager.find(Customer.class,customerId);
+                    CustomerSummaryMapper customerSummaryMapper = CustomerSummaryMapper.INSTANCE;
+                    return customerSummaryMapper.toDto(customer);
+                }
+        );
+    }
 
-    public List<RentalDto> getRentalsByCustomerId(Integer customerId) {
+
+    public List<RentalSummaryDto> getRentalsByCustomerId(Integer customerId) {
         return Database.doInTransaction(
                 entityManager -> {
                     Customer customer = entityManager.find(Customer.class,customerId);
                     if (customer == null)
                         throw new EntityNotFoundException("Can't get Customer with id: "+customerId);
-                    RentalMapper rentalMapper = RentalMapper.INSTANCE;
-                    return rentalMapper.toDto(new ArrayList<>(customer.getRentals()));
-                    /*CriteriaBuilder builder = entityManager.getCriteriaBuilder();
-                    CriteriaQuery<Rental> query = builder.createQuery(Rental.class);
-                    Root<Rental> rentalRoot = query.from(Rental.class);
-                    Predicate customerIdPredicate = builder.equal(rentalRoot.get("customer").get("id"), customerId);
-                    query.where(customerIdPredicate);
-                    List<Rental> payments = entityManager.createQuery(query).getResultList();
-                    return rentalMapper.toDto(payments);*/
+                    RentalSummaryMapper rentalSummaryMapper = RentalSummaryMapper.INSTANCE;
+                    return rentalSummaryMapper.toDto(new ArrayList<>(customer.getRentals()));
                 }
         );
     }

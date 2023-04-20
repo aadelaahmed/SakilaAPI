@@ -4,6 +4,7 @@ import com.example.sakilaapi.dto.rental.RentalDto;
 import com.example.sakilaapi.dto.customer.CustomerDto;
 import com.example.sakilaapi.dto.PaymentDto;
 import com.example.sakilaapi.dto.customer.CustomerSummaryDto;
+import com.example.sakilaapi.dto.rental.RentalSummaryDto;
 import com.example.sakilaapi.mapper.customer.CustomerMapper;
 import com.example.sakilaapi.repository.CustomerRepository;
 import com.example.sakilaapi.service.customer.CustomerService;
@@ -38,7 +39,7 @@ public class CustomerController {
     @GET
     @Path("/{customerId}/rentals")
     public Response getRentalsByCustomerId(@PathParam("customerId") Integer customerId){
-        List<RentalDto> rentalDtos = customerService.getRentalsByCustomerId(customerId);
+        List<RentalSummaryDto> rentalDtos = customerService.getRentalsByCustomerId(customerId);
         return Response.ok(rentalDtos).build();
     }
 
@@ -46,36 +47,11 @@ public class CustomerController {
     @Path("/{id}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getCustomerById(@PathParam("id") int id) {
-        CustomerDto customerDto = customerService.getById(id);
-        if (customerDto != null) {
-            return Response.ok(customerDto).build();
+        CustomerSummaryDto customerSummaryDto = customerService.getCustomerSummariesById(id);
+        if (customerSummaryDto != null) {
+            return Response.ok(customerSummaryDto).build();
         }
         return Response.status(Response.Status.NOT_FOUND).entity("Customer with id " + id + " not found").build();
-    }
-
-    @POST
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response createCustomer(CustomerDto customerDto) {
-        Optional<CustomerDto> optionalCustomerDto = Optional.ofNullable(customerService.create(customerDto, customerDto.getId()));
-        if (optionalCustomerDto.isPresent()) {
-            return Response.ok(optionalCustomerDto.get()).build();
-        }
-        return Response.status(Response.Status.BAD_REQUEST).entity("Can't create customer").build();
-    }
-
-    @PUT
-    @Path("/{id}")
-    @Consumes(MediaType.APPLICATION_JSON)
-    public Response update(@PathParam("id") Integer id, CustomerDto customerDto) {
-        customerDto.setId(id);
-        customerDto.setLastUpdate(Instant.now());
-        CustomerDto res = customerService.update(id, customerDto);
-        if (res != null) {
-            return Response.ok(res).build();
-        } else
-            return Response.status(Response.Status.BAD_REQUEST)
-                    .entity("can't update this Customer").build();
     }
 
     @DELETE
@@ -85,12 +61,12 @@ public class CustomerController {
         return Response.ok("Customer was deleted successfully").build();
     }
 
-    @GET
+   /* @GET
     @Path("/{id}/payments")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getPaymentsByCustomerId(@PathParam("id") Integer id) {
         //TODO -> check this endpoint
         List<PaymentDto> paymentDtos = customerService.getPaymentsByCustomerId(id);
         return Response.ok(paymentDtos).build();
-    }
+    }*/
 }

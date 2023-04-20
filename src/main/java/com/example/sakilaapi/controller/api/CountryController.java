@@ -48,7 +48,8 @@ public class CountryController {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response createCountry(CountryDto countryDto) {
-        Optional<CountryDto> optionalCountryDto = Optional.ofNullable(countryService.create(countryDto, countryDto.getId()));
+        countryDto.setLastUpdate(Instant.now());
+        Optional<CountryDto> optionalCountryDto = Optional.ofNullable(countryService.createByName(countryDto,"country", countryDto.getCountry()));
         if (optionalCountryDto.isPresent()) {
             return Response.ok(optionalCountryDto.get()).build();
         }
@@ -58,7 +59,7 @@ public class CountryController {
     @PUT
     @Path("/{id}")
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response update(@PathParam("id") Integer id, CountryDto countryDto) {
+    public Response updateCountry(@PathParam("id") Integer id, CountryDto countryDto) {
         countryDto.setId(id);
         countryDto.setLastUpdate(Instant.now());
         CountryDto res = countryService.update(id,countryDto);
@@ -69,10 +70,4 @@ public class CountryController {
                 .entity("can't update this Country").build();
     }
 
-    /*@DELETE
-    @Path("/{id}")
-    public Response deleteById(@PathParam("id") Integer id) {
-        countryService.deleteById(id);
-        return Response.ok("Country was deleted successfully").build();
-    }*/
 }

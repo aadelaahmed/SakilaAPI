@@ -59,19 +59,11 @@ public class CityController {
     public Response update(@PathParam("id") Integer id, CityDto cityDto) {
         cityDto.setId(id);
         cityDto.setLastUpdate(Instant.now());
-        cityDto.setId(null);
         CityDto res = service.update(id,cityDto);
         if (res != null) {
             return Response.ok(res).build();
         }
         return Response.status(Response.Status.BAD_REQUEST)
                 .entity("can't update this city").build();
-    }
-
-    @DELETE
-    @Path("/{id}")
-    public Response deleteById(@PathParam("id") Integer id) {
-        service.deleteById(id);
-        return Response.ok("city was deleted successfully").build();
     }
 }
