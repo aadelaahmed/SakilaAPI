@@ -13,8 +13,6 @@ import java.time.Instant;
 @Setter
 @NoArgsConstructor
 public class FilmRentalRequest implements Serializable {
-   /* @NotNull
-    private Instant rentalDate;*/
 
     @NotNull
     private Integer filmId;
@@ -25,6 +23,4 @@ public class FilmRentalRequest implements Serializable {
     @NotNull
     private Integer staffId;
 
-  /*  @NotNull
-    private Instant lastUpdate;*/
 }

@@ -21,7 +21,7 @@ public class RentalController {
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response create(FilmRentalRequest filmRentalRequest) {
+    public Response createRental(FilmRentalRequest filmRentalRequest) {
         RentalSummaryDto rentalSummaryDto = service.createRental(filmRentalRequest);
         if (rentalSummaryDto != null){
             return Response.ok(rentalSummaryDto).build();
@@ -30,7 +30,7 @@ public class RentalController {
     }
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getAll() {
+    public Response getAllRentals() {
         List<RentalSummaryDto> summaries = service.getRentalSummaries();
         System.out.println(summaries.stream().limit(3));
         GenericEntity entity = new GenericEntity<>(summaries) {

@@ -2,6 +2,7 @@ package com.example.sakilaapi.service.store;
 
 import com.example.sakilaapi.dto.ActorDto;
 import com.example.sakilaapi.dto.customer.CustomerSummaryDto;
+import com.example.sakilaapi.dto.staff.StaffSummaryDto;
 import com.example.sakilaapi.dto.store.StoreDto;
 import com.example.sakilaapi.dto.store.StoreSummaryDto;
 import com.example.sakilaapi.mapper.ActorMapper;
@@ -49,5 +50,17 @@ public class StoreService extends BaseService<Store, StoreDto> {
             throw new EntityNotFoundException("Can't find store with id: "+storeId);
         List<CustomerSummaryDto> customers = storeRepository.getAllCustomersByStoreId(storeId);
         return customers;
+    }
+
+    public StoreDto createStore(StoreSummaryDto storeSummaryDto) {
+        return storeRepository.createStore(storeSummaryDto);
+    }
+
+    public List<StaffSummaryDto> getAllStaffsByStoreId(Integer storeId) {
+        boolean isStoreExist = storeRepository.isExist(storeId);
+        if (!isStoreExist)
+            throw new EntityNotFoundException("Can't find store with id: "+storeId);
+        List<StaffSummaryDto> staffs = storeRepository.getAllStaffsByStoreId(storeId);
+        return staffs;
     }
 }
