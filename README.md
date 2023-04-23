@@ -1,31 +1,28 @@
 Sakila Rest Api
 <div align="center">
-  <a href="https://github.com/othneildrew/Best-README-Template">
-    <img src="images/logo.png" alt="Logo" width="200" height="auto">
-  </a>
   <h3 align="center">Sakila Rest Api</h3>
   <p align="center">
-    An awesome api Service Support different functions to use
+    A powerful API service that provides various functions for developers
     <br />
-    <a href="https://documenter.getpostman.com/view/14572081/2s93Y2T2vK"><strong>Explore Api documentation »</strong></a>
+    <a href="https://documenter.getpostman.com/view/14572081/2s93Y2T2vK"><strong>Explore API documentation »</strong></a>
     <br />
     <br />
   </p>
 </div>
 About The Project
 
-This project is a simple movie store provider that offers different services for developers. The project aims to provide REST and SOAP services to handle CRUD operations related to renting movies to customers.
+Sakila Rest Api is a movie store provider that offers different services for developers. The project aims to provide REST and SOAP services for CRUD (Create, Read, Update, Delete) operations related to renting movies to customers.
 Get Started
 
 To use this repository, follow these steps:
 
-    Download Tomcat 10 or any other container Download
-    Run Tomcat
+    Download and install Tomcat 10 or any other container.
+    Run Tomcat.
     Clone the repository:
 
 sh
 
-git clone (https://github.com/aadelaahmed/SakilaAPI.git)
+git clone https://github.com/aadelaahmed/SakilaAPI.git
 
     Modify Persistance.xml properties. Add the following properties:
 
@@ -54,7 +51,7 @@ xml
 
 Note: Make sure that port 8080 is available to avoid connection errors with Tomcat.
 
-    Now you are ready to deploy or deploy using Tomcat plugin:
+    Now you are ready to deploy or redeploy using Tomcat plugin:
 
 sh
 
@@ -86,5 +83,5 @@ We support eleven resources, each with its own requests and responses. To learn 
 
 Technology Used
 
-    Java java
-    Maven Maven Central](https://maven-badges.herokuapp.com/maven-central/cz.jirutka.rsql/rsql-parser)
+    Java
+    Maven (https://maven-badges.herokuapp.com/maven-central/cz.jirutka.rsql/rsql-parser)
